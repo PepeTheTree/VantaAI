@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>VantaAI</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: #0d0d0d;
+      color: #ffffff;
+      font-family: 'Courier New', monospace;
+      height: 100%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+    }
+
+    h1 {
+      font-size: 3rem;
+      color: #a94df0;
+      text-shadow: 0 0 15px #a94df0;
+      margin-bottom: 1rem;
+    }
+
+    .typing {
+      font-size: 1.2rem;
+      border-right: 2px solid #a94df0;
+      white-space: nowrap;
+      overflow: hidden;
+      width: 0;
+      animation:
+        typing 4s steps(40, end) forwards,
+        blink 0.75s step-end infinite;
+    }
+
+    @keyframes typing {
+      from { width: 0 }
+      to { width: 100% }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent }
+    }
+
+    .credits {
+      position: absolute;
+      bottom: 20px;
+      font-size: 0.75rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <h1>VantaAI is coming</h1>
+  <div class="typing">Emotion. Memory. Autonomy. Locally.</div>
+  <div class="credits">© 2025 VantaAI Systems</div>
+</body>
+</html>
