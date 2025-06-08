@@ -481,13 +481,60 @@
       100% { opacity: 1; transform: scale(1); }
     }
 
+    /* Founder info styles */
+    .founder-info {
+      position: absolute;
+      bottom: 2rem;
+      left: 2rem;
+      font-size: 0.8rem;
+      color: #666;
+      z-index: 10;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      transition: all 0.3s ease;
+    }
+
+    .founder-info:hover {
+      color: #888;
+    }
+
+    .founder-name {
+      color: #a94df0;
+      font-weight: bold;
+      margin-bottom: 0.2rem;
+    }
+
+    .founder-title {
+      margin-bottom: 0.5rem;
+    }
+
+    .founder-contact {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+    }
+
+    .founder-contact a {
+      color: #666;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .founder-contact a:hover {
+      color: #a94df0;
+      transform: translateX(5px);
+    }
+
     /* Footer */
     .footer {
       position: absolute;
       bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      text-align: center;
+      right: 2rem;
+      text-align: right;
       font-size: 0.8rem;
       color: #666;
       z-index: 10;
@@ -521,6 +568,28 @@
 
       .boot-sequence {
         font-size: 0.7rem;
+      }
+
+      .founder-info {
+        position: relative;
+        bottom: auto;
+        left: auto;
+        text-align: center;
+        margin-top: 2rem;
+        order: 1;
+      }
+
+      .footer {
+        position: relative;
+        bottom: auto;
+        right: auto;
+        text-align: center;
+        margin-top: 1rem;
+        order: 2;
+      }
+
+      .container {
+        padding-bottom: 4rem;
       }
     }
 
@@ -631,6 +700,16 @@
       <div class="success-message" id="success-message">
         ✓ You're in! We'll contact you when VantaAI launches.
       </div>
+    </div>
+  </div>
+
+  <!-- Founder Info -->
+  <div class="founder-info">
+    <div class="founder-name">Michael Martino</div>
+    <div class="founder-title">Founder — VantaAI</div>
+    <div class="founder-contact">
+      <a href="mailto:michael@vantaai.dev">✉️ michael@vantaai.dev</a>
+      <a href="https://www.vantaai.dev" target="_blank">🌐 www.vantaai.dev</a>
     </div>
   </div>
 
@@ -816,7 +895,8 @@
       "autonomy.level = MAX",
       "privacy.mode = 'absolute'",
       "local_processing = enabled",
-      "cloud_dependency = null"
+      "cloud_dependency = null",
+      "founder.vision = 'michael_martino'"
     ];
 
     function createMemoryFragment() {
@@ -845,7 +925,8 @@
       "Your data. Your hardware. Your AI.",
       "No cloud. No compromise. Just intelligence.",
       "The future runs on your machine.",
-      "Privacy-first AI is finally here."
+      "Privacy-first AI is finally here.",
+      "Built by humans, for humans."
     ];
 
     let messageIndex = 0;
@@ -956,7 +1037,7 @@
       }
     });
 
-    // Easter egg
+    // Easter egg - clicking logo or founder name
     let clickCount = 0;
     document.querySelector('h1').addEventListener('click', () => {
       clickCount++;
@@ -967,6 +1048,21 @@
           clickCount = 0;
         }, 3000);
       }
+    });
+
+    // Founder info easter egg
+    document.querySelector('.founder-name').addEventListener('click', () => {
+      const fragments = document.querySelectorAll('.memory-fragment');
+      fragments.forEach(fragment => {
+        fragment.style.color = '#00ff00';
+        fragment.style.textShadow = '0 0 20px #00ff00';
+      });
+      setTimeout(() => {
+        fragments.forEach(fragment => {
+          fragment.style.color = '';
+          fragment.style.textShadow = '';
+        });
+      }, 3000);
     });
   </script>
 </body>
