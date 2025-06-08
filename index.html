@@ -4,34 +4,77 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VantaAI</title>
+  <meta name="description" content="VantaAI - The blackbox AI core. Emotion. Memory. Autonomy. Locally." />
+  <!-- Open Graph tags for social sharing -->
+  <meta property="og:title" content="VantaAI" />
+  <meta property="og:description" content="The blackbox AI core. Emotion. Memory. Autonomy. Locally." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="https://yourdomain.com/og-image.png" /> <!-- Replace with your image -->
+  <link rel="icon" href="favicon.ico" />
+
+  <!-- Google Fonts for a modern look -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap" rel="stylesheet" />
+
   <style>
+    /* Reset and base styles */
     html, body {
       margin: 0;
       padding: 0;
-      background: #0d0d0d;
-      color: #ffffff;
-      font-family: 'Courier New', monospace;
       height: 100%;
-      overflow: hidden;
+      font-family: 'Orbitron', monospace;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
+      background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
+      overflow: hidden;
+      color: #ffffff;
     }
 
+    /* Animated background */
+    body::before {
+      content: "";
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse at bottom, #222 0%, transparent 70%),
+                  radial-gradient(ellipse at top, #222 0%, transparent 70%);
+      background-size: 200% 200%;
+      animation: gradientShift 15s ease infinite;
+      z-index: -1;
+    }
+
+    @keyframes gradientShift {
+      0% {background-position: 0% 50%;}
+      50% {background-position: 100% 50%;}
+      100% {background-position: 0% 50%;}
+    }
+
+    /* Heading styles */
     h1 {
-      font-size: 3rem;
+      font-size: 4rem;
       color: #a94df0;
-      text-shadow: 0 0 15px #a94df0;
-      margin-bottom: 1rem;
+      text-shadow: 0 0 20px #a94df0;
+      margin-top: 80px;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      transition: transform 0.3s;
+      animation: pulse 2s infinite;
     }
 
+    h1:hover {
+      transform: scale(1.05);
+    }
+
+    /* Typing effect styles */
     .typing {
-      font-size: 1.2rem;
-      border-right: 2px solid #a94df0;
+      font-size: 1.5rem;
+      border-right: 3px solid #a94df0;
       white-space: nowrap;
       overflow: hidden;
       width: 0;
+      max-width: 80%;
+      margin: 0 auto 40px auto;
+      padding: 0 10px;
       animation:
         typing 4s steps(40, end) forwards,
         blink 0.75s step-end infinite;
@@ -46,17 +89,76 @@
       50% { border-color: transparent }
     }
 
+    /* Contact section styles */
+    .contact {
+      position: relative;
+      max-width: 600px;
+      width: 90%;
+      margin: 0 auto;
+      padding: 20px 0;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #888;
+    }
+
+    .contact h2 {
+      margin-bottom: 10px;
+      font-size: 1.2rem;
+      color: #aaa;
+    }
+
+    .contact p {
+      margin: 8px 0;
+    }
+
+    .contact a {
+      color: #a94df0;
+      text-decoration: none;
+    }
+    .contact a:hover {
+      text-decoration: underline;
+    }
+
+    /* Credits styling */
     .credits {
       position: absolute;
       bottom: 20px;
-      font-size: 0.75rem;
-      color: #666;
+      font-size: 0.9rem;
+      color: #999;
+      opacity: 0.7;
+      transition: opacity 0.3s;
+    }
+
+    .credits:hover {
+      opacity: 1;
+    }
+
+    /* Optional pulse animation for header (already included above) */
+    @keyframes pulse {
+      0% {transform: scale(1);}
+      50% {transform: scale(1.05);}
+      100% {transform: scale(1);}
     }
   </style>
 </head>
 <body>
   <h1>VantaAI is coming</h1>
   <div class="typing">Emotion. Memory. Autonomy. Locally.</div>
+  
+  <!-- Contact & Links Section -->
+  <div class="contact">
+    <h2>Contact</h2>
+    <p>Email: <a href="mailto:business@vantaai.dev">business@vantaai.dev</a></p>
+    <p>GitHub: <a href="https://github.com/PepeTheTree/VantaAI" target="_blank" rel="noopener noreferrer">VantaAI on GitHub</a></p>
+    <p>Status: Private Alpha — Phase 8.1</p>
+    <!-- Optional additional links -->
+    <!--
+    <p>Resume: <a href="your-resume-link.pdf" target="_blank">Download PDF</a></p>
+    <p>Blog: <a href="your-blog-link" target="_blank">Read Our Blog</a></p>
+    <p>Community: <a href="your-discord-link" target="_blank">Join Discord</a></p>
+    -->
+  </div>
+  
   <div class="credits">© 2025 VantaAI Systems</div>
 </body>
 </html>
