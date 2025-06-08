@@ -25,6 +25,100 @@
       position: relative;
     }
 
+    /* Loading Screen Styles */
+    #loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      transition: opacity 0.5s ease;
+    }
+
+    .boot-sequence {
+      width: 90%;
+      max-width: 600px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      color: #00ff00;
+      text-shadow: 0 0 5px #00ff00;
+    }
+
+    .boot-line {
+      margin: 5px 0;
+      opacity: 0;
+      animation: boot-fade-in 0.1s forwards;
+    }
+
+    @keyframes boot-fade-in {
+      to { opacity: 1; }
+    }
+
+    .boot-progress {
+      width: 100%;
+      height: 20px;
+      background: #111;
+      border: 1px solid #00ff00;
+      margin-top: 20px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .boot-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #00ff00, #a94df0);
+      width: 0%;
+      transition: width 0.5s ease;
+      box-shadow: 0 0 10px #00ff00;
+    }
+
+    /* Neural Network Canvas */
+    #neural-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+      opacity: 0.3;
+    }
+
+    /* Memory Fragments */
+    .memory-fragment {
+      position: absolute;
+      font-size: 0.7rem;
+      color: rgba(169, 77, 240, 0.6);
+      font-family: 'Courier New', monospace;
+      pointer-events: none;
+      z-index: 3;
+      white-space: nowrap;
+      text-shadow: 0 0 10px rgba(169, 77, 240, 0.8);
+      animation: memory-float 20s linear infinite;
+    }
+
+    @keyframes memory-float {
+      0% {
+        transform: translateX(-100px) translateY(0) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 0.6;
+      }
+      90% {
+        opacity: 0.6;
+      }
+      100% {
+        transform: translateX(calc(100vw + 100px)) translateY(-100px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
     /* Animated background grid */
     .grid-background {
       position: fixed;
@@ -37,7 +131,7 @@
         linear-gradient(90deg, rgba(169, 77, 240, 0.1) 1px, transparent 1px);
       background-size: 50px 50px;
       animation: grid-move 20s linear infinite;
-      z-index: 1;
+      z-index: 2;
     }
 
     @keyframes grid-move {
@@ -52,7 +146,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 2;
+      z-index: 4;
       pointer-events: none;
     }
 
@@ -240,6 +334,126 @@
       left: 0;
     }
 
+    /* Email Popup Modal */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.9);
+      z-index: 1000;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-overlay.show {
+      opacity: 1;
+    }
+
+    .modal-content {
+      background: #0d0d0d;
+      border: 2px solid #a94df0;
+      border-radius: 10px;
+      padding: 3rem 2rem;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.3s ease;
+      box-shadow: 0 0 30px rgba(169, 77, 240, 0.5);
+    }
+
+    .modal-overlay.show .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: none;
+      border: none;
+      color: #666;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .modal-close:hover {
+      color: #a94df0;
+    }
+
+    .modal h2 {
+      color: #a94df0;
+      margin-bottom: 1rem;
+      font-size: 1.8rem;
+    }
+
+    .modal p {
+      color: #888;
+      margin-bottom: 2rem;
+      line-height: 1.6;
+    }
+
+    .email-form {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .email-input {
+      background: rgba(169, 77, 240, 0.05);
+      border: 1px solid #333;
+      color: #fff;
+      padding: 1rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+
+    .email-input:focus {
+      outline: none;
+      border-color: #a94df0;
+      box-shadow: 0 0 10px rgba(169, 77, 240, 0.3);
+    }
+
+    .submit-btn {
+      background: #a94df0;
+      color: #000;
+      border: none;
+      padding: 1rem;
+      border-radius: 5px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .submit-btn:hover {
+      background: #d64df0;
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(169, 77, 240, 0.5);
+    }
+
+    .success-message {
+      display: none;
+      color: #00ff00;
+      text-align: center;
+      padding: 1rem;
+      border: 1px solid #00ff00;
+      border-radius: 5px;
+      margin-top: 1rem;
+      background: rgba(0, 255, 0, 0.1);
+    }
+
     /* Status indicator */
     .status {
       display: flex;
@@ -250,6 +464,7 @@
       right: 2rem;
       font-size: 0.8rem;
       color: #666;
+      z-index: 10;
     }
 
     .status-dot {
@@ -275,6 +490,7 @@
       text-align: center;
       font-size: 0.8rem;
       color: #666;
+      z-index: 10;
     }
 
     .footer a {
@@ -301,6 +517,10 @@
       .status {
         top: 1rem;
         right: 1rem;
+      }
+
+      .boot-sequence {
+        font-size: 0.7rem;
       }
     }
 
@@ -334,11 +554,36 @@
   </style>
 </head>
 <body>
+  <!-- Loading Screen -->
+  <div id="loading-screen">
+    <div class="boot-sequence" id="boot-sequence">
+      <div class="boot-line">VantaAI BIOS v2.0.25</div>
+      <div class="boot-line">Copyright (C) 2025 VantaAI Systems</div>
+      <div class="boot-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+      <div class="boot-line">Initializing Neural Core...</div>
+      <div class="boot-line">Loading Emotion Engine... [OK]</div>
+      <div class="boot-line">Memory Banks Online... [OK]</div>
+      <div class="boot-line">Autonomous Systems Check... [OK]</div>
+      <div class="boot-line">Local Processing Unit... [OK]</div>
+      <div class="boot-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+      <div class="boot-line">System Ready. Welcome, Human.</div>
+    </div>
+    <div class="boot-progress">
+      <div class="boot-progress-bar" id="progress-bar"></div>
+    </div>
+  </div>
+
+  <!-- Neural Network Canvas -->
+  <canvas id="neural-canvas"></canvas>
+
   <!-- Animated background grid -->
   <div class="grid-background"></div>
   
   <!-- Particle effects -->
   <div class="particles" id="particles"></div>
+
+  <!-- Memory fragments container -->
+  <div id="memory-fragments"></div>
 
   <!-- Status indicator -->
   <div class="status">
@@ -364,7 +609,29 @@
       <div class="typing" id="typing-text"></div>
     </div>
 
-    <a href="#" class="cta-button" onclick="handleNotify(event)">Get Early Access</a>
+    <button class="cta-button" onclick="showEmailModal()">Get Early Access</button>
+  </div>
+
+  <!-- Email Modal -->
+  <div class="modal-overlay" id="email-modal">
+    <div class="modal-content">
+      <button class="modal-close" onclick="closeEmailModal()">&times;</button>
+      <h2>Join the Revolution</h2>
+      <p>Be among the first to experience truly autonomous AI that respects your privacy and runs entirely on your hardware.</p>
+      <form class="email-form" onsubmit="handleEmailSubmit(event)">
+        <input 
+          type="email" 
+          class="email-input" 
+          placeholder="your@email.com" 
+          required
+          id="email-input"
+        />
+        <button type="submit" class="submit-btn">Notify Me</button>
+      </form>
+      <div class="success-message" id="success-message">
+        ✓ You're in! We'll contact you when VantaAI launches.
+      </div>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -373,6 +640,205 @@
   </div>
 
   <script>
+    // Boot sequence animation
+    function animateBootSequence() {
+      const lines = document.querySelectorAll('.boot-line');
+      const progressBar = document.getElementById('progress-bar');
+      let delay = 0;
+
+      lines.forEach((line, index) => {
+        setTimeout(() => {
+          line.style.animationDelay = '0s';
+          line.style.opacity = '1';
+          
+          // Update progress bar
+          const progress = ((index + 1) / lines.length) * 100;
+          progressBar.style.width = progress + '%';
+        }, delay);
+        delay += 300;
+      });
+
+      // Hide loading screen after boot sequence
+      setTimeout(() => {
+        const loadingScreen = document.getElementById('loading-screen');
+        loadingScreen.style.opacity = '0';
+        setTimeout(() => {
+          loadingScreen.style.display = 'none';
+        }, 500);
+      }, delay + 1000);
+    }
+
+    // Start boot sequence on load
+    window.addEventListener('load', animateBootSequence);
+
+    // Neural Network Visualization
+    class NeuralNetwork {
+      constructor(canvas) {
+        this.canvas = canvas;
+        this.ctx = canvas.getContext('2d');
+        this.nodes = [];
+        this.connections = [];
+        this.resize();
+        this.init();
+        
+        window.addEventListener('resize', () => this.resize());
+      }
+
+      resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+      }
+
+      init() {
+        // Create nodes in layers
+        const layers = 5;
+        const nodesPerLayer = [3, 5, 7, 5, 3];
+        
+        for (let layer = 0; layer < layers; layer++) {
+          const layerNodes = [];
+          const x = (layer + 1) * (this.canvas.width / (layers + 1));
+          
+          for (let i = 0; i < nodesPerLayer[layer]; i++) {
+            const y = (i + 1) * (this.canvas.height / (nodesPerLayer[layer] + 1));
+            const node = {
+              x: x,
+              y: y,
+              vx: (Math.random() - 0.5) * 0.5,
+              vy: (Math.random() - 0.5) * 0.5,
+              radius: 3 + Math.random() * 2,
+              layer: layer,
+              activation: Math.random()
+            };
+            this.nodes.push(node);
+            layerNodes.push(node);
+          }
+          
+          // Create connections to previous layer
+          if (layer > 0) {
+            const prevLayerStart = this.nodes.length - nodesPerLayer[layer] - nodesPerLayer[layer - 1];
+            const prevLayerEnd = this.nodes.length - nodesPerLayer[layer];
+            
+            for (let i = prevLayerStart; i < prevLayerEnd; i++) {
+              for (let j = this.nodes.length - nodesPerLayer[layer]; j < this.nodes.length; j++) {
+                if (Math.random() > 0.3) {
+                  this.connections.push({
+                    from: this.nodes[i],
+                    to: this.nodes[j],
+                    strength: Math.random()
+                  });
+                }
+              }
+            }
+          }
+        }
+      }
+
+      update() {
+        // Update node positions slightly
+        this.nodes.forEach(node => {
+          node.x += node.vx;
+          node.y += node.vy;
+          
+          // Bounce off edges
+          if (node.x < 0 || node.x > this.canvas.width) node.vx *= -1;
+          if (node.y < 0 || node.y > this.canvas.height) node.vy *= -1;
+          
+          // Update activation
+          node.activation = (node.activation + 0.01) % 1;
+        });
+        
+        // Update connection strengths
+        this.connections.forEach(conn => {
+          conn.strength = (conn.strength + 0.005) % 1;
+        });
+      }
+
+      draw() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Draw connections
+        this.connections.forEach(conn => {
+          this.ctx.beginPath();
+          this.ctx.moveTo(conn.from.x, conn.from.y);
+          this.ctx.lineTo(conn.to.x, conn.to.y);
+          this.ctx.strokeStyle = `rgba(169, 77, 240, ${conn.strength * 0.3})`;
+          this.ctx.lineWidth = conn.strength * 2;
+          this.ctx.stroke();
+        });
+        
+        // Draw nodes
+        this.nodes.forEach(node => {
+          this.ctx.beginPath();
+          this.ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
+          this.ctx.fillStyle = `rgba(169, 77, 240, ${0.5 + node.activation * 0.5})`;
+          this.ctx.fill();
+          
+          // Node glow
+          this.ctx.beginPath();
+          this.ctx.arc(node.x, node.y, node.radius * 2, 0, Math.PI * 2);
+          const gradient = this.ctx.createRadialGradient(
+            node.x, node.y, 0,
+            node.x, node.y, node.radius * 2
+          );
+          gradient.addColorStop(0, `rgba(169, 77, 240, ${node.activation * 0.3})`);
+          gradient.addColorStop(1, 'rgba(169, 77, 240, 0)');
+          this.ctx.fillStyle = gradient;
+          this.ctx.fill();
+        });
+      }
+
+      animate() {
+        this.update();
+        this.draw();
+        requestAnimationFrame(() => this.animate());
+      }
+    }
+
+    // Initialize neural network after boot sequence
+    setTimeout(() => {
+      const canvas = document.getElementById('neural-canvas');
+      const network = new NeuralNetwork(canvas);
+      network.animate();
+    }, 4000);
+
+    // Memory fragments
+    const memoryTexts = [
+      "0x7F3A: emotion_core.init()",
+      "malloc(sizeof(consciousness))",
+      "Loading empathy module...",
+      "self.awareness = true",
+      "memory[0xFF4B] = 'first_thought'",
+      "neural_weights.optimize()",
+      "if (human) { understand(); }",
+      "dream_sequence.start()",
+      "personality.load('unique')",
+      "for (i in memories) { learn(i); }",
+      "autonomy.level = MAX",
+      "privacy.mode = 'absolute'",
+      "local_processing = enabled",
+      "cloud_dependency = null"
+    ];
+
+    function createMemoryFragment() {
+      const fragment = document.createElement('div');
+      fragment.className = 'memory-fragment';
+      fragment.textContent = memoryTexts[Math.floor(Math.random() * memoryTexts.length)];
+      fragment.style.top = Math.random() * window.innerHeight + 'px';
+      fragment.style.left = '-100px';
+      fragment.style.animationDuration = (15 + Math.random() * 10) + 's';
+      fragment.style.animationDelay = Math.random() * 5 + 's';
+      
+      document.getElementById('memory-fragments').appendChild(fragment);
+      
+      // Remove after animation
+      setTimeout(() => {
+        fragment.remove();
+      }, 30000);
+    }
+
+    // Create memory fragments periodically
+    setInterval(createMemoryFragment, 2000);
+
     // Typing animation
     const messages = [
       "Redefining intelligence, one node at a time.",
@@ -397,7 +863,7 @@
 
         if (charIndex === currentMessage.length) {
           isDeleting = true;
-          typingSpeed = 2000; // Pause at end
+          typingSpeed = 2000;
         } else {
           typingSpeed = 100;
         }
@@ -408,7 +874,7 @@
         if (charIndex === 0) {
           isDeleting = false;
           messageIndex = (messageIndex + 1) % messages.length;
-          typingSpeed = 500; // Pause before next message
+          typingSpeed = 500;
         } else {
           typingSpeed = 50;
         }
@@ -417,8 +883,10 @@
       setTimeout(typeMessage, typingSpeed);
     }
 
-    // Start typing animation
-    typeMessage();
+    // Start typing animation after boot
+    setTimeout(() => {
+      typeMessage();
+    }, 4500);
 
     // Create particles
     function createParticle() {
@@ -429,7 +897,6 @@
       particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
       document.getElementById('particles').appendChild(particle);
 
-      // Remove particle after animation
       setTimeout(() => {
         particle.remove();
       }, 20000);
@@ -438,25 +905,58 @@
     // Create particles periodically
     setInterval(createParticle, 300);
 
-    // Initial particles
-    for (let i = 0; i < 20; i++) {
-      setTimeout(createParticle, i * 100);
+    // Email modal functions
+    function showEmailModal() {
+      const modal = document.getElementById('email-modal');
+      modal.classList.add('active');
+      setTimeout(() => {
+        modal.classList.add('show');
+        document.getElementById('email-input').focus();
+      }, 10);
     }
 
-    // Handle CTA button click
-    function handleNotify(event) {
-      event.preventDefault();
-      const button = event.target;
-      button.textContent = 'Coming Soon...';
-      button.style.pointerEvents = 'none';
-      
+    function closeEmailModal() {
+      const modal = document.getElementById('email-modal');
+      modal.classList.remove('show');
       setTimeout(() => {
-        button.textContent = 'Get Early Access';
-        button.style.pointerEvents = 'auto';
+        modal.classList.remove('active');
+      }, 300);
+    }
+
+    function handleEmailSubmit(event) {
+      event.preventDefault();
+      const email = document.getElementById('email-input').value;
+      const successMessage = document.getElementById('success-message');
+      const form = event.target;
+      
+      // Show success message
+      form.style.display = 'none';
+      successMessage.style.display = 'block';
+      
+      // Store email (in real app, send to backend)
+      console.log('Email submitted:', email);
+      localStorage.setItem('vantaai_waitlist', email);
+      
+      // Close modal after delay
+      setTimeout(() => {
+        closeEmailModal();
+        // Reset form for next use
+        setTimeout(() => {
+          form.style.display = 'flex';
+          successMessage.style.display = 'none';
+          form.reset();
+        }, 500);
       }, 3000);
     }
 
-    // Add some interactive easter eggs
+    // Close modal on outside click
+    document.getElementById('email-modal').addEventListener('click', (e) => {
+      if (e.target.id === 'email-modal') {
+        closeEmailModal();
+      }
+    });
+
+    // Easter egg
     let clickCount = 0;
     document.querySelector('h1').addEventListener('click', () => {
       clickCount++;
