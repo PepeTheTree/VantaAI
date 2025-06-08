@@ -27,7 +27,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; /* start from top, can switch to center if desired */
+      justify-content: flex-start; /* start from top; change to 'center' if preferred */
       background: linear-gradient(135deg, #0d0d0d, #1a1a1a);
       color: #fff;
     }
@@ -78,15 +78,17 @@
       max-width: 80%;
       margin: 0 auto 40px auto;
       padding: 0 10px;
+      /* Apply animations for typing and blinking cursor */
+      animation: typing 4s steps(40, end) forwards, blink 0.75s step-end infinite;
     }
 
     @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+      from { width: 0; }
+      to { width: 100%; }
     }
 
     @keyframes blink {
-      50% { border-color: transparent }
+      50% { border-color: transparent; }
     }
 
     /* Contact section styles */
@@ -139,7 +141,7 @@
       100% {transform: scale(1);}
     }
 
-    /* Optional: small adjustments for responsiveness */
+    /* Responsive tweaks */
     @media(max-width: 600px){
       h1 {
         font-size: 2.5rem;
@@ -160,12 +162,6 @@
     <p>Email: <a href="mailto:business@vantaai.dev">business@vantaai.dev</a></p>
     <p>GitHub: <a href="https://github.com/PepeTheTree/VantaAI" target="_blank" rel="noopener noreferrer">VantaAI on GitHub</a></p>
     <p>Status: Private Alpha — Phase 8.1</p>
-    <!-- Optional additional links -->
-    <!--
-    <p>Resume: <a href="your-resume-link.pdf" target="_blank">Download PDF</a></p>
-    <p>Blog: <a href="your-blog-link" target="_blank">Read Our Blog</a></p>
-    <p>Community: <a href="your-discord-link" target="_blank">Join Discord</a></p>
-    -->
   </div>
   
   <div class="credits">© 2025 VantaAI Systems</div>
