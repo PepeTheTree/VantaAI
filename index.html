@@ -9,6 +9,10 @@
   <meta property="og:description" content="Emotion. Memory. Autonomy. Locally.">
   <meta property="og:type" content="website">
   <title>VantaAI - The Future is Local</title>
+  
+  <!-- Add Three.js for 3D globe -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  
   <style>
     * {
       margin: 0;
@@ -23,6 +27,194 @@
       height: 100%;
       overflow: hidden;
       position: relative;
+    }
+
+    /* Network Map Toggle Button */
+    .network-toggle {
+      position: fixed;
+      top: 2rem;
+      left: 2rem;
+      z-index: 100;
+      background: rgba(13, 13, 13, 0.9);
+      border: 1px solid #a94df0;
+      border-radius: 5px;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .network-toggle:hover {
+      background: rgba(169, 77, 240, 0.1);
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(169, 77, 240, 0.3);
+    }
+
+    .network-toggle .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ff00;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    /* Network Map Container */
+    .network-map-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.98);
+      z-index: 999;
+      display: none;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    .network-map-container.active {
+      display: block;
+    }
+
+    .network-map-container.show {
+      opacity: 1;
+    }
+
+    /* Network Stats */
+    .network-stats {
+      position: absolute;
+      top: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      z-index: 10;
+      backdrop-filter: blur(10px);
+      background: rgba(0, 0, 0, 0.8);
+      padding: 1.5rem 3rem;
+      border-radius: 10px;
+      border: 1px solid rgba(169, 77, 240, 0.3);
+    }
+
+    .network-title {
+      font-size: 2rem;
+      color: #a94df0;
+      margin-bottom: 1rem;
+      text-shadow: 0 0 20px rgba(169, 77, 240, 0.5);
+    }
+
+    .network-subtitle {
+      color: #888;
+      margin-bottom: 1.5rem;
+      font-size: 1.1rem;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 2.5rem;
+      color: #a94df0;
+      font-weight: bold;
+      animation: stat-glow 2s ease-in-out infinite;
+    }
+
+    @keyframes stat-glow {
+      0%, 100% { text-shadow: 0 0 10px rgba(169, 77, 240, 0.5); }
+      50% { text-shadow: 0 0 20px rgba(169, 77, 240, 0.8); }
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+      margin-top: 0.5rem;
+    }
+
+    /* Globe Container */
+    #network-globe {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    /* Node Info Popup */
+    .node-popup {
+      position: absolute;
+      background: rgba(13, 13, 13, 0.95);
+      border: 1px solid #a94df0;
+      border-radius: 5px;
+      padding: 1rem;
+      font-size: 0.8rem;
+      display: none;
+      z-index: 20;
+      min-width: 200px;
+      box-shadow: 0 0 20px rgba(169, 77, 240, 0.5);
+    }
+
+    .node-popup.active {
+      display: block;
+    }
+
+    .node-name {
+      color: #a94df0;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+    }
+
+    .node-info {
+      color: #888;
+      line-height: 1.5;
+    }
+
+    /* Close button */
+    .network-close {
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      background: none;
+      border: 2px solid #666;
+      color: #666;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .network-close:hover {
+      border-color: #a94df0;
+      color: #a94df0;
+      transform: rotate(90deg);
+    }
+
+    /* Connection lines */
+    .connection-hint {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      color: #666;
+      font-size: 0.8rem;
+      text-align: center;
+      z-index: 10;
     }
 
     /* Loading Screen Styles */
@@ -443,6 +635,12 @@
       box-shadow: 0 5px 15px rgba(169, 77, 240, 0.5);
     }
 
+    .submit-btn:disabled {
+      background: #666;
+      cursor: not-allowed;
+      transform: none;
+    }
+
     .success-message {
       display: none;
       color: #00ff00;
@@ -452,6 +650,17 @@
       border-radius: 5px;
       margin-top: 1rem;
       background: rgba(0, 255, 0, 0.1);
+    }
+
+    .error-message {
+      display: none;
+      color: #ff3333;
+      text-align: center;
+      padding: 1rem;
+      border: 1px solid #ff3333;
+      border-radius: 5px;
+      margin-top: 1rem;
+      background: rgba(255, 51, 51, 0.1);
     }
 
     /* Status indicator */
@@ -566,6 +775,13 @@
         right: 1rem;
       }
 
+      .network-toggle {
+        top: 1rem;
+        left: 1rem;
+        font-size: 0.7rem;
+        padding: 0.4rem 0.8rem;
+      }
+
       .boot-sequence {
         font-size: 0.7rem;
       }
@@ -590,6 +806,24 @@
 
       .container {
         padding-bottom: 4rem;
+      }
+
+      .stat-grid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+      }
+
+      .network-stats {
+        padding: 1rem;
+        width: 90%;
+      }
+
+      .network-title {
+        font-size: 1.5rem;
+      }
+
+      .stat-value {
+        font-size: 2rem;
       }
     }
 
@@ -623,6 +857,53 @@
   </style>
 </head>
 <body>
+  <!-- Network Map Toggle -->
+  <button class="network-toggle" onclick="toggleNetworkMap()">
+    <div class="pulse-dot"></div>
+    <span>Live Network</span>
+  </button>
+
+  <!-- Network Map Container -->
+  <div class="network-map-container" id="network-map">
+    <button class="network-close" onclick="closeNetworkMap()">×</button>
+    
+    <div class="network-stats">
+      <h2 class="network-title">VantaAI Global Network</h2>
+      <p class="network-subtitle">The Future is Local... but Together</p>
+      
+      <div class="stat-grid">
+        <div class="stat-item">
+          <div class="stat-value" id="active-nodes">0</div>
+          <div class="stat-label">Active Nodes</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="processing-power">0</div>
+          <div class="stat-label">TFLOPS Combined</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value" id="countries-count">0</div>
+          <div class="stat-label">Countries</div>
+        </div>
+      </div>
+    </div>
+    
+    <div id="network-globe"></div>
+    
+    <div class="connection-hint">
+      Click on nodes to see their contribution • Drag to rotate
+    </div>
+    
+    <div class="node-popup" id="node-popup">
+      <div class="node-name" id="node-name">Node-7X9-Purple</div>
+      <div class="node-info" id="node-info">
+        Region: North America<br>
+        Status: Active<br>
+        Uptime: 12h 34m<br>
+        Processing: 2.4 TFLOPS
+      </div>
+    </div>
+  </div>
+
   <!-- Loading Screen -->
   <div id="loading-screen">
     <div class="boot-sequence" id="boot-sequence">
@@ -634,6 +915,7 @@
       <div class="boot-line">Memory Banks Online... [OK]</div>
       <div class="boot-line">Autonomous Systems Check... [OK]</div>
       <div class="boot-line">Local Processing Unit... [OK]</div>
+      <div class="boot-line">Connecting to Global Network... [OK]</div>
       <div class="boot-line">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
       <div class="boot-line">System Ready. Welcome, Human.</div>
     </div>
@@ -695,10 +977,13 @@
           required
           id="email-input"
         />
-        <button type="submit" class="submit-btn">Notify Me</button>
+        <button type="submit" class="submit-btn" id="submit-btn">Notify Me</button>
       </form>
       <div class="success-message" id="success-message">
         ✓ You're in! We'll contact you when VantaAI launches.
+      </div>
+      <div class="error-message" id="error-message">
+        ✗ Something went wrong. Please try again.
       </div>
     </div>
   </div>
@@ -719,6 +1004,334 @@
   </div>
 
   <script>
+    // Network Map Visualization
+    let scene, camera, renderer, globe, nodes = [];
+    let raycaster, mouse;
+    let isNetworkMapOpen = false;
+
+    // Mock data for demo - in production, this would come from WebSocket/API
+    const mockNodes = [
+      { lat: 40.7128, lon: -74.0060, name: "Echo-NYC", power: 3.2, region: "North America" },
+      { lat: 51.5074, lon: -0.1278, name: "Athena-LON", power: 2.8, region: "Europe" },
+      { lat: 35.6762, lon: 139.6503, name: "Sakura-TKY", power: 4.1, region: "Asia" },
+      { lat: -33.8688, lon: 151.2093, name: "Reef-SYD", power: 2.2, region: "Oceania" },
+      { lat: 37.7749, lon: -122.4194, name: "Nova-SF", power: 5.0, region: "North America" },
+      { lat: 52.5200, lon: 13.4050, name: "Berlin-Core", power: 3.5, region: "Europe" },
+      { lat: 19.4326, lon: -99.1332, name: "Aztec-MX", power: 2.1, region: "North America" },
+      { lat: -23.5505, lon: -46.6333, name: "Phoenix-SP", power: 3.8, region: "South America" },
+      { lat: 55.7558, lon: 37.6173, name: "Kremlin-AI", power: 3.3, region: "Europe" },
+      { lat: 1.3521, lon: 103.8198, name: "Lion-SG", power: 4.5, region: "Asia" },
+      { lat: 31.2304, lon: 121.4737, name: "Dragon-SH", power: 4.8, region: "Asia" },
+      { lat: 28.6139, lon: 77.2090, name: "Delhi-Mind", power: 3.1, region: "Asia" },
+      { lat: -26.2041, lon: 28.0473, name: "Ubuntu-JHB", power: 2.5, region: "Africa" },
+      { lat: 41.9028, lon: 12.4964, name: "Roma-Neural", power: 2.7, region: "Europe" },
+      { lat: 59.3293, lon: 18.0686, name: "Nordic-ST", power: 3.0, region: "Europe" }
+    ];
+
+    function initNetworkGlobe() {
+      if (scene) return; // Already initialized
+
+      scene = new THREE.Scene();
+      camera = new THREE.PerspectiveCamera(
+        50,
+        window.innerWidth / window.innerHeight,
+        0.1,
+        1000
+      );
+      camera.position.z = 250;
+
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+      renderer.setSize(window.innerWidth, window.innerHeight);
+      renderer.setPixelRatio(window.devicePixelRatio);
+      document.getElementById('network-globe').appendChild(renderer.domElement);
+
+      // Create globe
+      const globeGeometry = new THREE.SphereGeometry(100, 64, 64);
+      const globeMaterial = new THREE.MeshPhongMaterial({
+        color: 0x111111,
+        emissive: 0x220044,
+        emissiveIntensity: 0.1,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.3
+      });
+      globe = new THREE.Mesh(globeGeometry, globeMaterial);
+      scene.add(globe);
+
+      // Add lights
+      const ambientLight = new THREE.AmbientLight(0x404040);
+      scene.add(ambientLight);
+
+      const pointLight = new THREE.PointLight(0xa94df0, 1, 500);
+      pointLight.position.set(150, 150, 150);
+      scene.add(pointLight);
+
+      // Raycaster for mouse interactions
+      raycaster = new THREE.Raycaster();
+      mouse = new THREE.Vector2();
+
+      // Add nodes
+      createNodes();
+
+      // Mouse events
+      renderer.domElement.addEventListener('mousemove', onMouseMove);
+      renderer.domElement.addEventListener('mousedown', onMouseDown);
+      renderer.domElement.addEventListener('mouseup', onMouseUp);
+      renderer.domElement.addEventListener('wheel', onMouseWheel);
+
+      // Start animation counters
+      animateNetworkStats();
+    }
+
+    function createNodes() {
+      mockNodes.forEach((nodeData, index) => {
+        // Convert lat/lon to 3D coordinates
+        const phi = (90 - nodeData.lat) * (Math.PI / 180);
+        const theta = (nodeData.lon + 180) * (Math.PI / 180);
+        
+        const x = 100 * Math.sin(phi) * Math.cos(theta);
+        const y = 100 * Math.cos(phi);
+        const z = 100 * Math.sin(phi) * Math.sin(theta);
+
+        // Create node
+        const nodeGeometry = new THREE.SphereGeometry(2, 16, 16);
+        const nodeMaterial = new THREE.MeshPhongMaterial({
+          color: 0xa94df0,
+          emissive: 0xa94df0,
+          emissiveIntensity: 0.5
+        });
+        
+        const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+        node.position.set(x, y, z);
+        node.userData = nodeData;
+        
+        // Add glow
+        const glowGeometry = new THREE.SphereGeometry(4, 16, 16);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+          color: 0xa94df0,
+          transparent: true,
+          opacity: 0.3
+        });
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        node.add(glow);
+        
+        // Pulse animation
+        node.userData.pulse = 0;
+        
+        scene.add(node);
+        nodes.push(node);
+
+        // Create connections to nearby nodes
+        if (index > 0 && Math.random() > 0.5) {
+          const targetNode = nodes[Math.floor(Math.random() * index)];
+          createConnection(node, targetNode);
+        }
+      });
+    }
+
+    function createConnection(node1, node2) {
+      const points = [];
+      points.push(node1.position);
+      
+      // Create curved path
+      const midpoint = new THREE.Vector3()
+        .addVectors(node1.position, node2.position)
+        .multiplyScalar(0.5);
+      midpoint.multiplyScalar(1.2);
+      
+      points.push(midpoint);
+      points.push(node2.position);
+      
+      const curve = new THREE.CatmullRomCurve3(points);
+      const curvePoints = curve.getPoints(50);
+      
+      const lineGeometry = new THREE.BufferGeometry().setFromPoints(curvePoints);
+      const lineMaterial = new THREE.LineBasicMaterial({
+        color: 0xa94df0,
+        transparent: true,
+        opacity: 0.2
+      });
+      
+      const line = new THREE.Line(lineGeometry, lineMaterial);
+      scene.add(line);
+    }
+
+    let isDragging = false;
+    let previousMousePosition = { x: 0, y: 0 };
+
+    function onMouseMove(event) {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      if (isDragging) {
+        const deltaMove = {
+          x: event.clientX - previousMousePosition.x,
+          y: event.clientY - previousMousePosition.y
+        };
+
+        globe.rotation.y += deltaMove.x * 0.01;
+        globe.rotation.x += deltaMove.y * 0.01;
+
+        nodes.forEach(node => {
+          const pos = node.position.clone();
+          pos.applyAxisAngle(new THREE.Vector3(0, 1, 0), deltaMove.x * 0.01);
+          pos.applyAxisAngle(new THREE.Vector3(1, 0, 0), deltaMove.y * 0.01);
+          node.position.copy(pos);
+        });
+      }
+
+      previousMousePosition = {
+        x: event.clientX,
+        y: event.clientY
+      };
+
+      // Check for hover
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(nodes);
+      
+      const popup = document.getElementById('node-popup');
+      if (intersects.length > 0) {
+        const node = intersects[0].object;
+        renderer.domElement.style.cursor = 'pointer';
+        
+        // Show popup
+        popup.classList.add('active');
+        popup.style.left = event.clientX + 10 + 'px';
+        popup.style.top = event.clientY + 10 + 'px';
+        
+        document.getElementById('node-name').textContent = node.userData.name;
+        document.getElementById('node-info').innerHTML = `
+          Region: ${node.userData.region}<br>
+          Status: Active<br>
+          Uptime: ${Math.floor(Math.random() * 24)}h ${Math.floor(Math.random() * 60)}m<br>
+          Processing: ${node.userData.power} TFLOPS
+        `;
+      } else {
+        renderer.domElement.style.cursor = 'grab';
+        popup.classList.remove('active');
+      }
+    }
+
+    function onMouseDown(event) {
+      isDragging = true;
+      renderer.domElement.style.cursor = 'grabbing';
+    }
+
+    function onMouseUp(event) {
+      isDragging = false;
+      renderer.domElement.style.cursor = 'grab';
+    }
+
+    function onMouseWheel(event) {
+      camera.position.z += event.deltaY * 0.1;
+      camera.position.z = Math.max(150, Math.min(400, camera.position.z));
+    }
+
+    function animateGlobe() {
+      if (!isNetworkMapOpen) return;
+
+      requestAnimationFrame(animateGlobe);
+
+      // Rotate nodes slightly
+      nodes.forEach(node => {
+        node.userData.pulse += 0.05;
+        const scale = 1 + Math.sin(node.userData.pulse) * 0.2;
+        node.scale.set(scale, scale, scale);
+        
+        // Update glow
+        if (node.children[0]) {
+          node.children[0].material.opacity = 0.3 + Math.sin(node.userData.pulse) * 0.2;
+        }
+      });
+
+      renderer.render(scene, camera);
+    }
+
+    function animateNetworkStats() {
+      // Animate counters
+      const activeNodesEl = document.getElementById('active-nodes');
+      const processingPowerEl = document.getElementById('processing-power');
+      const countriesEl = document.getElementById('countries-count');
+
+      let currentNodes = 0;
+      let currentPower = 0;
+      let currentCountries = 0;
+
+      const targetNodes = mockNodes.length;
+      const targetPower = mockNodes.reduce((sum, node) => sum + node.power, 0);
+      const targetCountries = new Set(mockNodes.map(n => n.region)).size;
+
+      const animateCounter = () => {
+        if (currentNodes < targetNodes) {
+          currentNodes++;
+          activeNodesEl.textContent = currentNodes;
+        }
+
+        if (currentPower < targetPower) {
+          currentPower += 0.5;
+          processingPowerEl.textContent = currentPower.toFixed(1);
+        }
+
+        if (currentCountries < targetCountries) {
+          currentCountries++;
+          countriesEl.textContent = currentCountries;
+        }
+
+        if (currentNodes < targetNodes || currentPower < targetPower || currentCountries < targetCountries) {
+          setTimeout(animateCounter, 50);
+        }
+      };
+
+      animateCounter();
+
+      // Simulate real-time updates
+      setInterval(() => {
+        if (isNetworkMapOpen && Math.random() > 0.7) {
+          const currentValue = parseInt(activeNodesEl.textContent);
+          activeNodesEl.textContent = currentValue + Math.floor(Math.random() * 3);
+          
+          const currentPowerValue = parseFloat(processingPowerEl.textContent);
+          processingPowerEl.textContent = (currentPowerValue + Math.random() * 2).toFixed(1);
+        }
+      }, 3000);
+    }
+
+    function toggleNetworkMap() {
+      const networkMap = document.getElementById('network-map');
+      networkMap.classList.add('active');
+      
+      setTimeout(() => {
+        networkMap.classList.add('show');
+        isNetworkMapOpen = true;
+        
+        if (!scene) {
+          initNetworkGlobe();
+        }
+        
+        animateGlobe();
+      }, 10);
+    }
+
+    function closeNetworkMap() {
+      const networkMap = document.getElementById('network-map');
+      networkMap.classList.remove('show');
+      
+      setTimeout(() => {
+        networkMap.classList.remove('active');
+        isNetworkMapOpen = false;
+      }, 500);
+    }
+
+    // Window resize handler
+    window.addEventListener('resize', () => {
+      if (camera && renderer) {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+    });
+
     // Boot sequence animation
     function animateBootSequence() {
       const lines = document.querySelectorAll('.boot-line');
@@ -896,7 +1509,10 @@
       "privacy.mode = 'absolute'",
       "local_processing = enabled",
       "cloud_dependency = null",
-      "founder.vision = 'michael_martino'"
+      "founder.vision = 'michael_martino'",
+      "network.nodes.connect()",
+      "collective.consciousness++",
+      "peer.handshake.established"
     ];
 
     function createMemoryFragment() {
@@ -926,7 +1542,9 @@
       "No cloud. No compromise. Just intelligence.",
       "The future runs on your machine.",
       "Privacy-first AI is finally here.",
-      "Built by humans, for humans."
+      "Built by humans, for humans.",
+      "Join the decentralized AI revolution.",
+      "Every node strengthens the network."
     ];
 
     let messageIndex = 0;
@@ -1001,33 +1619,78 @@
       modal.classList.remove('show');
       setTimeout(() => {
         modal.classList.remove('active');
+        // Reset form
+        document.getElementById('email-input').value = '';
+        document.getElementById('submit-btn').disabled = false;
+        document.getElementById('submit-btn').textContent = 'Notify Me';
+        document.getElementById('success-message').style.display = 'none';
+        document.getElementById('error-message').style.display = 'none';
+        document.querySelector('.email-form').style.display = 'flex';
       }, 300);
     }
 
-    function handleEmailSubmit(event) {
+    // UPDATED EMAIL SUBMISSION WITH FORMSUBMIT
+    async function handleEmailSubmit(event) {
       event.preventDefault();
+      
       const email = document.getElementById('email-input').value;
+      const submitBtn = document.getElementById('submit-btn');
       const successMessage = document.getElementById('success-message');
+      const errorMessage = document.getElementById('error-message');
       const form = event.target;
       
-      // Show success message
-      form.style.display = 'none';
-      successMessage.style.display = 'block';
+      // Disable button and show loading state
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Sending...';
       
-      // Store email (in real app, send to backend)
-      console.log('Email submitted:', email);
-      localStorage.setItem('vantaai_waitlist', email);
-      
-      // Close modal after delay
-      setTimeout(() => {
-        closeEmailModal();
-        // Reset form for next use
+      try {
+        // Send to FormSubmit
+        const response = await fetch('https://formsubmit.co/ajax/michael@vantaai.dev', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            _subject: 'New VantaAI Early Access Signup!',
+            _template: 'table',
+            _captcha: 'false',  // Disable captcha for AJAX
+            message: `New early access signup from: ${email}`,
+            timestamp: new Date().toISOString()
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.success) {
+          // Success! Hide form and show success message
+          form.style.display = 'none';
+          successMessage.style.display = 'block';
+          
+          // Also store locally as backup
+          localStorage.setItem('vantaai_waitlist', email);
+          console.log('Email submitted successfully:', email);
+          
+          // Close modal after 3 seconds
+          setTimeout(() => {
+            closeEmailModal();
+          }, 3000);
+        } else {
+          throw new Error('Submission failed');
+        }
+      } catch (error) {
+        // Show error message
+        console.error('Error submitting email:', error);
+        errorMessage.style.display = 'block';
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Notify Me';
+        
+        // Hide error message after 5 seconds
         setTimeout(() => {
-          form.style.display = 'flex';
-          successMessage.style.display = 'none';
-          form.reset();
-        }, 500);
-      }, 3000);
+          errorMessage.style.display = 'none';
+        }, 5000);
+      }
     }
 
     // Close modal on outside click
