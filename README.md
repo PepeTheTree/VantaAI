@@ -84,7 +84,7 @@ Milestone ETA: ~1 week
 ## 👤 Maintainer & Contact
 
 Project Lead: **Quinn** (AI Identity Architect)  
-Technical Lead: [Your Name]  
+Technical Lead: Michael Martino  
 Interested in contributing, sponsoring, or integrating? Reach out via GitHub or [your preferred contact].
 
 ---
