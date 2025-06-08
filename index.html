@@ -3,60 +3,471 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VantaAI</title>
+  <meta name="description" content="VantaAI - Next-generation AI with emotion, memory, and autonomy. Experience intelligence that runs locally.">
+  <meta name="keywords" content="AI, artificial intelligence, local AI, autonomous AI, VantaAI">
+  <meta property="og:title" content="VantaAI - The Future of Local AI">
+  <meta property="og:description" content="Emotion. Memory. Autonomy. Locally.">
+  <meta property="og:type" content="website">
+  <title>VantaAI - The Future is Local</title>
   <style>
-    html, body {
+    * {
       margin: 0;
       padding: 0;
-      background: #0d0d0d;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background: #000000;
       color: #ffffff;
       font-family: 'Courier New', monospace;
       height: 100%;
       overflow: hidden;
+      position: relative;
+    }
+
+    /* Animated background grid */
+    .grid-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(169, 77, 240, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(169, 77, 240, 0.1) 1px, transparent 1px);
+      background-size: 50px 50px;
+      animation: grid-move 20s linear infinite;
+      z-index: 1;
+    }
+
+    @keyframes grid-move {
+      0% { transform: translate(0, 0); }
+      100% { transform: translate(50px, 50px); }
+    }
+
+    /* Particle effect */
+    .particles {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .particle {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #a94df0;
+      border-radius: 50%;
+      opacity: 0;
+      animation: float-up 10s linear infinite;
+    }
+
+    @keyframes float-up {
+      0% {
+        opacity: 0;
+        transform: translateY(100vh) scale(0);
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        opacity: 0;
+        transform: translateY(-100vh) scale(1);
+      }
+    }
+
+    /* Main container */
+    .container {
+      position: relative;
+      z-index: 10;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
+      height: 100vh;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    /* Logo/Title styles */
+    .logo-container {
+      position: relative;
+      margin-bottom: 2rem;
     }
 
     h1 {
-      font-size: 3rem;
-      color: #a94df0;
-      text-shadow: 0 0 15px #a94df0;
-      margin-bottom: 1rem;
+      font-size: clamp(2.5rem, 8vw, 5rem);
+      font-weight: bold;
+      letter-spacing: 0.1em;
+      background: linear-gradient(45deg, #a94df0, #d64df0, #a94df0);
+      background-size: 200% 200%;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: gradient-shift 3s ease infinite;
+      filter: drop-shadow(0 0 20px rgba(169, 77, 240, 0.5));
+    }
+
+    @keyframes gradient-shift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* Subtitle */
+    .subtitle {
+      font-size: clamp(0.9rem, 2vw, 1.3rem);
+      color: #888;
+      margin-bottom: 3rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Feature tags */
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin-bottom: 3rem;
+    }
+
+    .feature {
+      padding: 0.5rem 1.5rem;
+      border: 1px solid #a94df0;
+      border-radius: 25px;
+      font-size: 0.9rem;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      background: rgba(169, 77, 240, 0.05);
+    }
+
+    .feature::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(169, 77, 240, 0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .feature:hover::before {
+      width: 100%;
+      height: 100%;
+    }
+
+    .feature:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(169, 77, 240, 0.3);
+    }
+
+    /* Typing effect container */
+    .typing-container {
+      margin-bottom: 3rem;
+      height: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .typing {
-      font-size: 1.2rem;
-      border-right: 2px solid #a94df0;
-      white-space: nowrap;
-      overflow: hidden;
-      width: 0;
-      animation:
-        typing 4s steps(40, end) forwards,
-        blink 0.75s step-end infinite;
+      font-size: clamp(1rem, 2.5vw, 1.4rem);
+      font-family: 'Courier New', monospace;
+      color: #fff;
+      position: relative;
+      padding-right: 0.1em;
     }
 
-    @keyframes typing {
-      from { width: 0 }
-      to { width: 100% }
+    .typing::after {
+      content: '|';
+      position: absolute;
+      right: 0;
+      color: #a94df0;
+      animation: blink 0.7s step-end infinite;
     }
 
     @keyframes blink {
-      50% { border-color: transparent }
+      50% { opacity: 0 }
     }
 
-    .credits {
+    /* CTA Button */
+    .cta-button {
+      padding: 1rem 2.5rem;
+      font-size: 1.1rem;
+      background: transparent;
+      color: #a94df0;
+      border: 2px solid #a94df0;
+      border-radius: 5px;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      text-decoration: none;
+      display: inline-block;
+      margin-top: 1rem;
+    }
+
+    .cta-button::before {
+      content: '';
       position: absolute;
-      bottom: 20px;
-      font-size: 0.75rem;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: #a94df0;
+      transition: left 0.3s ease;
+      z-index: -1;
+    }
+
+    .cta-button:hover {
+      color: #000;
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(169, 77, 240, 0.3);
+    }
+
+    .cta-button:hover::before {
+      left: 0;
+    }
+
+    /* Status indicator */
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: absolute;
+      top: 2rem;
+      right: 2rem;
+      font-size: 0.8rem;
       color: #666;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      background: #00ff00;
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.7; transform: scale(1.2); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    /* Footer */
+    .footer {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .footer a {
+      color: #a94df0;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+
+    .footer a:hover {
+      color: #d64df0;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 768px) {
+      .features {
+        gap: 0.5rem;
+      }
+      
+      .feature {
+        font-size: 0.8rem;
+        padding: 0.4rem 1rem;
+      }
+
+      .status {
+        top: 1rem;
+        right: 1rem;
+      }
+    }
+
+    /* Glitch effect for title on hover */
+    h1:hover {
+      animation: glitch 0.3s ease-in-out;
+    }
+
+    @keyframes glitch {
+      0%, 100% {
+        text-shadow: 
+          0 0 20px rgba(169, 77, 240, 0.5),
+          0 0 30px rgba(169, 77, 240, 0.3);
+      }
+      25% {
+        text-shadow: 
+          -2px 0 20px rgba(255, 0, 255, 0.5),
+          2px 0 30px rgba(0, 255, 255, 0.3);
+      }
+      50% {
+        text-shadow: 
+          2px 0 20px rgba(255, 0, 255, 0.5),
+          -2px 0 30px rgba(0, 255, 255, 0.3);
+      }
+      75% {
+        text-shadow: 
+          0 0 20px rgba(169, 77, 240, 0.5),
+          0 0 40px rgba(169, 77, 240, 0.5);
+      }
     }
   </style>
 </head>
 <body>
-  <h1>VantaAI is coming</h1>
-  <div class="typing">Emotion. Memory. Autonomy. Locally.</div>
-  <div class="credits">© 2025 VantaAI Systems</div>
+  <!-- Animated background grid -->
+  <div class="grid-background"></div>
+  
+  <!-- Particle effects -->
+  <div class="particles" id="particles"></div>
+
+  <!-- Status indicator -->
+  <div class="status">
+    <div class="status-dot"></div>
+    <span>Systems Online</span>
+  </div>
+
+  <!-- Main content -->
+  <div class="container">
+    <div class="logo-container">
+      <h1>VantaAI</h1>
+      <p class="subtitle">Next Generation Intelligence</p>
+    </div>
+
+    <div class="features">
+      <div class="feature">Emotion</div>
+      <div class="feature">Memory</div>
+      <div class="feature">Autonomy</div>
+      <div class="feature">Locally</div>
+    </div>
+
+    <div class="typing-container">
+      <div class="typing" id="typing-text"></div>
+    </div>
+
+    <a href="#" class="cta-button" onclick="handleNotify(event)">Get Early Access</a>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <p>© 2025 VantaAI Systems | <a href="#">Privacy</a> | <a href="#">Terms</a></p>
+  </div>
+
+  <script>
+    // Typing animation
+    const messages = [
+      "Redefining intelligence, one node at a time.",
+      "Your data. Your hardware. Your AI.",
+      "No cloud. No compromise. Just intelligence.",
+      "The future runs on your machine.",
+      "Privacy-first AI is finally here."
+    ];
+
+    let messageIndex = 0;
+    let charIndex = 0;
+    let isDeleting = false;
+    let typingSpeed = 100;
+
+    function typeMessage() {
+      const currentMessage = messages[messageIndex];
+      const typingElement = document.getElementById('typing-text');
+
+      if (!isDeleting) {
+        typingElement.textContent = currentMessage.substring(0, charIndex + 1);
+        charIndex++;
+
+        if (charIndex === currentMessage.length) {
+          isDeleting = true;
+          typingSpeed = 2000; // Pause at end
+        } else {
+          typingSpeed = 100;
+        }
+      } else {
+        typingElement.textContent = currentMessage.substring(0, charIndex - 1);
+        charIndex--;
+
+        if (charIndex === 0) {
+          isDeleting = false;
+          messageIndex = (messageIndex + 1) % messages.length;
+          typingSpeed = 500; // Pause before next message
+        } else {
+          typingSpeed = 50;
+        }
+      }
+
+      setTimeout(typeMessage, typingSpeed);
+    }
+
+    // Start typing animation
+    typeMessage();
+
+    // Create particles
+    function createParticle() {
+      const particle = document.createElement('div');
+      particle.className = 'particle';
+      particle.style.left = Math.random() * window.innerWidth + 'px';
+      particle.style.animationDelay = Math.random() * 10 + 's';
+      particle.style.animationDuration = (Math.random() * 10 + 10) + 's';
+      document.getElementById('particles').appendChild(particle);
+
+      // Remove particle after animation
+      setTimeout(() => {
+        particle.remove();
+      }, 20000);
+    }
+
+    // Create particles periodically
+    setInterval(createParticle, 300);
+
+    // Initial particles
+    for (let i = 0; i < 20; i++) {
+      setTimeout(createParticle, i * 100);
+    }
+
+    // Handle CTA button click
+    function handleNotify(event) {
+      event.preventDefault();
+      const button = event.target;
+      button.textContent = 'Coming Soon...';
+      button.style.pointerEvents = 'none';
+      
+      setTimeout(() => {
+        button.textContent = 'Get Early Access';
+        button.style.pointerEvents = 'auto';
+      }, 3000);
+    }
+
+    // Add some interactive easter eggs
+    let clickCount = 0;
+    document.querySelector('h1').addEventListener('click', () => {
+      clickCount++;
+      if (clickCount === 7) {
+        document.body.style.filter = 'hue-rotate(180deg)';
+        setTimeout(() => {
+          document.body.style.filter = 'none';
+          clickCount = 0;
+        }, 3000);
+      }
+    });
+  </script>
 </body>
 </html>
