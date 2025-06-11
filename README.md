@@ -85,7 +85,7 @@ Milestone ETA: ~1 week
 
 Project Lead: **Quinn** (AI Identity Architect)  
 Technical Lead: Michael Martino  
-Interested in contributing, sponsoring, or integrating? Reach out via GitHub or [your preferred contact].
+Interested in contributing, sponsoring, or integrating? Reach out via GitHub or michael@vantaai.dev.
 
 ---
 
