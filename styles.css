@@ -749,6 +749,125 @@ body {
     }
 }
 
+/* Performance optimizations */
+.reduced-motion {
+    animation: none !important;
+    transition: none !important;
+}
+
+/* Quick stats for homepage */
+.quick-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    margin-top: 3rem;
+    flex-wrap: wrap;
+}
+
+.stat {
+    text-align: center;
+    min-width: 120px;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #a94df0;
+    text-shadow: 0 0 10px rgba(169, 77, 240, 0.5);
+}
+
+.stat-label {
+    display: block;
+    color: #888;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+}
+
+/* Optimized animations - less intensive */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Lower GPU usage particles */
+.particle {
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+/* Optimized neural canvas */
+#neural-canvas {
+    will-change: auto;
+}
+
+/* Faster loading optimizations */
+.navbar {
+    will-change: transform;
+}
+
+/* Reduce layout shifts */
+.loading-placeholder {
+    min-height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+}
+
+/* Critical above-the-fold styles */
+.hero-section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Lazy load images */
+.lazy-load {
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.lazy-load.loaded {
+    opacity: 1;
+}
+
+/* Mobile performance optimizations */
+@media (max-width: 768px) {
+    .particles {
+        display: none;
+        /* Remove particles on mobile */
+    }
+
+    #neural-canvas {
+        display: none;
+        /* Remove neural canvas on mobile */
+    }
+
+    .grid-background {
+        animation: none;
+        /* Remove grid animation on mobile */
+    }
+
+    .memory-fragment {
+        display: none;
+        /* Remove memory fragments on mobile */
+    }
+
+    .quick-stats {
+        gap: 1.5rem;
+    }
+
+    .stat-number {
+        font-size: 1.5rem;
+    }
+}
+
 /* Mobile Responsiveness */
 @media (max-width: 768px) {
     .nav-toggle {
@@ -1153,5 +1272,246 @@ h1:hover {
         text-shadow:
             2px 0 20px rgba(255, 0, 255, 0.5),
             -2px 0 30px rgba(0, 255, 255, 0.3);
+    }
+}
+
+/* Additional styles for separate pages */
+.features-details {
+    margin-top: 4rem;
+    text-align: left;
+}
+
+.features-details h3 {
+    color: #a94df0;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.5rem;
+}
+
+.tech-specs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-top: 2rem;
+}
+
+.spec-item {
+    background: rgba(13, 13, 13, 0.8);
+    border: 1px solid rgba(169, 77, 240, 0.3);
+    border-radius: 10px;
+    padding: 1.5rem;
+}
+
+.spec-item h4 {
+    color: #a94df0;
+    margin-bottom: 1rem;
+    font-size: 1.1rem;
+}
+
+.spec-item ul {
+    list-style: none;
+    padding: 0;
+}
+
+.spec-item li {
+    color: #bbb;
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    position: relative;
+}
+
+.spec-item li::before {
+    content: '▸';
+    color: #a94df0;
+    position: absolute;
+    left: 0;
+}
+
+/* Privacy page specific styles */
+.privacy-hero {
+    text-align: center;
+    margin-bottom: 3rem;
+}
+
+.privacy-hero h3 {
+    font-size: clamp(1.5rem, 4vw, 2.2rem);
+    color: #fff;
+    margin-bottom: 1rem;
+}
+
+.privacy-subtitle {
+    color: #888;
+    font-style: italic;
+    font-size: 1.1rem;
+}
+
+.privacy-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin: 3rem 0;
+}
+
+.privacy-item {
+    background: rgba(13, 13, 13, 0.8);
+    border: 1px solid rgba(169, 77, 240, 0.3);
+    border-radius: 10px;
+    padding: 2rem;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.privacy-item:hover {
+    border-color: #a94df0;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(169, 77, 240, 0.2);
+}
+
+.privacy-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.privacy-item h4 {
+    color: #fff;
+    margin-bottom: 1rem;
+    font-size: 1.2rem;
+}
+
+.privacy-item p {
+    color: #bbb;
+    line-height: 1.5;
+}
+
+.privacy-guarantee {
+    text-align: center;
+    margin: 3rem 0;
+    padding: 2rem;
+    background: rgba(169, 77, 240, 0.1);
+    border: 1px solid rgba(169, 77, 240, 0.3);
+    border-radius: 10px;
+}
+
+.privacy-guarantee h3 {
+    color: #fff;
+    font-size: 1.5rem;
+}
+
+.privacy-details {
+    margin: 3rem 0;
+}
+
+.privacy-details h4 {
+    color: #a94df0;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+}
+
+.privacy-tech {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.tech-point {
+    background: rgba(0, 0, 0, 0.5);
+    border: 1px solid rgba(169, 77, 240, 0.2);
+    border-radius: 8px;
+    padding: 1.5rem;
+}
+
+.tech-point h5 {
+    color: #a94df0;
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+}
+
+.tech-point p {
+    color: #bbb;
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.privacy-tagline {
+    text-align: center;
+    font-style: italic;
+    color: #a94df0;
+    font-size: 1.3rem;
+    margin: 3rem 0;
+    padding: 2rem;
+    border-left: 3px solid #a94df0;
+    background: rgba(169, 77, 240, 0.05);
+    border-radius: 0 10px 10px 0;
+}
+
+.privacy-comparison {
+    margin-top: 3rem;
+}
+
+.privacy-comparison h4 {
+    color: #a94df0;
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 1.3rem;
+}
+
+.comparison-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: rgba(13, 13, 13, 0.8);
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1px solid rgba(169, 77, 240, 0.3);
+}
+
+.comparison-table th,
+.comparison-table td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid rgba(169, 77, 240, 0.1);
+}
+
+.comparison-table th {
+    background: rgba(169, 77, 240, 0.2);
+    color: #fff;
+    font-weight: bold;
+}
+
+.comparison-table td {
+    color: #bbb;
+}
+
+.comparison-table .good {
+    color: #00ff00;
+    font-weight: bold;
+}
+
+.comparison-table .bad {
+    color: #ff6b6b;
+}
+
+/* Responsive adjustments for separate pages */
+@media (max-width: 768px) {
+    .tech-specs {
+        grid-template-columns: 1fr;
+    }
+
+    .privacy-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .privacy-tech {
+        grid-template-columns: 1fr;
+    }
+
+    .comparison-table {
+        font-size: 0.8rem;
+    }
+
+    .comparison-table th,
+    .comparison-table td {
+        padding: 0.5rem;
     }
 }
