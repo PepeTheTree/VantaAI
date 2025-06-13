@@ -496,37 +496,66 @@ document.addEventListener('DOMContentLoaded', function () {
         if (modal && e.target === modal) {
             hideEmailModal();
         }
+    });    // Google Forms Integration - Listen for form submissions
+    window.addEventListener('message', function (event) {
+        // Google Forms sends a message when submitted
+        if (event.data && typeof event.data === 'string' && event.data.includes('formResponse')) {
+            const successMessage = document.querySelector('.success-message');
+            const iframe = document.getElementById('google-form-iframe');
+
+            if (successMessage && iframe) {
+                iframe.style.display = 'none';
+                successMessage.style.display = 'block';
+
+                // Auto-close modal after 3 seconds
+                setTimeout(() => {
+                    hideEmailModal();
+                    iframe.style.display = 'block';
+                    successMessage.style.display = 'none';
+                }, 3000);
+            }
+        }
     });
 
-    // Form submission
-    const emailForm = document.getElementById('email-form');
-    if (emailForm) {
-        emailForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const submitBtn = document.querySelector('.submit-btn');
-            const successMessage = document.querySelector('.success-message');
-            const errorMessage = document.querySelector('.error-message');
+    // Enhanced Google Forms handling
+    function initGoogleFormsHandling() {
+        const iframe = document.getElementById('google-form-iframe');
+        const backup = document.querySelector('.form-backup');
 
-            submitBtn.disabled = true;
-            submitBtn.textContent = 'Joining...';
+        if (iframe && backup) {
+            // Show backup link if iframe fails to load
+            iframe.addEventListener('error', () => {
+                console.log('Google Form iframe failed to load, showing backup link');
+                backup.style.display = 'block';
+                backup.style.backgroundColor = 'rgba(255, 77, 77, 0.1)';
+                backup.style.borderColor = '#ff4d4d';
+            });
 
-            // Simulate API call
+            // Hide backup initially if iframe loads successfully
+            iframe.addEventListener('load', () => {
+                console.log('Google Form iframe loaded successfully');
+                // Keep backup visible but less prominent
+                backup.style.backgroundColor = 'rgba(169, 77, 240, 0.05)';
+            });
+
+            // Add a timeout fallback
             setTimeout(() => {
-                if (email && email.includes('@')) {
-                    successMessage.style.display = 'block';
-                    errorMessage.style.display = 'none';
-                    emailForm.style.display = 'none';
-                } else {
-                    errorMessage.style.display = 'block';
-                    errorMessage.textContent = 'Please enter a valid email address.';
+                // Check if iframe has loaded content
+                try {
+                    if (iframe.contentDocument || iframe.contentWindow.document) {
+                        console.log('Google Form loaded in iframe');
+                    }
+                } catch (e) {
+                    console.log('Google Form may have loading restrictions, showing prominent backup');
+                    backup.style.display = 'block';
+                    backup.innerHTML = '<p><strong>📝 Click here to fill out the form:</strong> <a href="https://forms.gle/xrjiEuGWLtEGaxaN6" target="_blank" class="form-link">Open VantaAI Waitlist Form</a></p>';
                 }
-
-                submitBtn.disabled = false;
-                submitBtn.textContent = 'Join Waitlist';
-            }, 1500);
-        });
+            }, 3000);
+        }
     }
+
+    // Initialize Google Forms handling after DOM loads
+    initGoogleFormsHandling();
 
     // Network stats animation
     function animateNetworkStats() {
