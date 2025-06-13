@@ -1515,3 +1515,57 @@ h1:hover {
         padding: 0.5rem;
     }
 }
+
+/* Google Forms Integration Styles */
+#google-form-iframe {
+    border-radius: 10px;
+    background: rgba(13, 13, 13, 0.8);
+    border: 1px solid rgba(169, 77, 240, 0.3);
+}
+
+.form-backup {
+    text-align: center;
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(169, 77, 240, 0.1);
+    border-radius: 5px;
+    border: 1px solid rgba(169, 77, 240, 0.3);
+}
+
+.form-backup p {
+    color: #888;
+    margin: 0;
+    padding: 1rem;
+}
+
+.form-backup strong {
+    color: #a94df0;
+}
+
+/* Make the backup link more prominent when needed */
+.form-backup.prominent {
+    background: rgba(169, 77, 240, 0.15) !important;
+    border: 2px solid #a94df0 !important;
+    text-align: center;
+}
+
+.form-backup.prominent .form-link {
+    font-size: 1.1rem;
+    padding: 0.5rem 1rem;
+    background: #a94df0;
+    color: #000;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-block;
+    margin-top: 0.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.form-backup.prominent .form-link:hover {
+    background: #d64df0;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(169, 77, 240, 0.4);
+}
+
+/*# sourceMappingURL=styles.css.map */
