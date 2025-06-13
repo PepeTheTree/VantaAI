@@ -82,157 +82,173 @@ function showBootSequence() {
 // Network Map Globe functionality
 function initNetworkGlobe() {
     const container = document.getElementById('network-globe');
-    if (!container) return;
-
-    // Scene setup
-    scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-    renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0x000000, 0);
-    container.appendChild(renderer.domElement);
-
-    // Create globe
-    const geometry = new THREE.SphereGeometry(2, 32, 32);
-    const material = new THREE.MeshBasicMaterial({
-        color: 0x1a1a2e,
-        wireframe: true,
-        transparent: true,
-        opacity: 0.3
-    });
-    globe = new THREE.Mesh(geometry, material);
-    scene.add(globe);
-
-    // Generate nodes
-    for (let i = 0; i < 100; i++) {
-        const nodeGeometry = new THREE.SphereGeometry(0.02, 8, 8);
-        const nodeMaterial = new THREE.MeshBasicMaterial({
-            color: Math.random() > 0.5 ? 0xa94df0 : 0x00ff00
-        });
-        const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-
-        // Position on globe surface
-        const phi = Math.acos(-1 + (2 * i) / 100);
-        const theta = Math.sqrt(100 * Math.PI) * phi;
-
-        node.position.x = 2 * Math.cos(theta) * Math.sin(phi);
-        node.position.y = 2 * Math.sin(theta) * Math.sin(phi);
-        node.position.z = 2 * Math.cos(phi);
-
-        scene.add(node);
-        nodes.push(node);
+    if (!container) {
+        console.warn('Network globe container not found');
+        return;
     }
 
-    camera.position.z = 5;
+    // Check if Three.js is loaded
+    if (typeof THREE === 'undefined') {
+        console.error('Three.js not loaded');
+        return;
+    }
 
-    // Animation loop
-    function animate() {
-        requestAnimationFrame(animate);
+    try {
+        // Scene setup
+        scene = new THREE.Scene();
+        camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
+        container.appendChild(renderer.domElement);
 
-        if (globe) {
-            globe.rotation.y += 0.005;
-            nodes.forEach(node => {
-                node.rotation.y += 0.01;
+        // Create globe
+        const geometry = new THREE.SphereGeometry(2, 32, 32);
+        const material = new THREE.MeshBasicMaterial({
+            color: 0x1a1a2e,
+            wireframe: true,
+            transparent: true,
+            opacity: 0.3
+        });
+        globe = new THREE.Mesh(geometry, material);
+        scene.add(globe);
+
+        // Generate nodes
+        for (let i = 0; i < 100; i++) {
+            const nodeGeometry = new THREE.SphereGeometry(0.02, 8, 8);
+            const nodeMaterial = new THREE.MeshBasicMaterial({
+                color: Math.random() > 0.5 ? 0xa94df0 : 0x00ff00
             });
+            const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
+
+            // Position on globe surface
+            const phi = Math.acos(-1 + (2 * i) / 100);
+            const theta = Math.sqrt(100 * Math.PI) * phi;
+
+            node.position.x = 2 * Math.cos(theta) * Math.sin(phi);
+            node.position.y = 2 * Math.sin(theta) * Math.sin(phi);
+            node.position.z = 2 * Math.cos(phi);
+
+            scene.add(node);
+            nodes.push(node);
         }
 
-        renderer.render(scene, camera);
+        camera.position.z = 5;
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            if (globe) {
+                globe.rotation.y += 0.005;
+                nodes.forEach(node => {
+                    node.rotation.y += 0.01;
+                });
+            }
+
+            renderer.render(scene, camera);
+        } animate();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+    } catch (error) {
+        console.error('Error initializing network globe:', error);
     }
-
-    animate();
-
-    // Handle resize
-    window.addEventListener('resize', () => {
-        camera.aspect = window.innerWidth / window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth, window.innerHeight);
-    });
 }
 
 // Neural Network Canvas
 function initNeuralCanvas() {
     neuralCanvas = document.getElementById('neural-canvas');
-    if (!neuralCanvas) return;
-
-    neuralCanvas.width = window.innerWidth;
-    neuralCanvas.height = window.innerHeight;
-    neuralCtx = neuralCanvas.getContext('2d');
-
-    const neurons = [];
-    const connections = [];
-
-    // Create neurons
-    for (let i = 0; i < 50; i++) {
-        neurons.push({
-            x: Math.random() * window.innerWidth,
-            y: Math.random() * window.innerHeight,
-            vx: (Math.random() - 0.5) * 2,
-            vy: (Math.random() - 0.5) * 2,
-            size: Math.random() * 3 + 1,
-            pulse: Math.random() * Math.PI * 2
-        });
+    if (!neuralCanvas) {
+        console.warn('Neural canvas element not found');
+        return;
     }
 
-    // Create connections
-    for (let i = 0; i < neurons.length; i++) {
-        for (let j = i + 1; j < neurons.length; j++) {
-            if (Math.random() < 0.1) {
-                connections.push({ from: i, to: j, strength: Math.random() });
-            }
-        }
-    }
-
-    function animateNeural() {
-        neuralCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-        // Update and draw connections
-        neuralCtx.strokeStyle = 'rgba(169, 77, 240, 0.1)';
-        neuralCtx.lineWidth = 1;
-
-        connections.forEach(conn => {
-            const from = neurons[conn.from];
-            const to = neurons[conn.to];
-            const distance = Math.sqrt((to.x - from.x) ** 2 + (to.y - from.y) ** 2);
-
-            if (distance < 200) {
-                neuralCtx.beginPath();
-                neuralCtx.moveTo(from.x, from.y);
-                neuralCtx.lineTo(to.x, to.y);
-                neuralCtx.globalAlpha = (200 - distance) / 200 * conn.strength;
-                neuralCtx.stroke();
-            }
-        });
-
-        // Update and draw neurons
-        neurons.forEach(neuron => {
-            neuron.x += neuron.vx;
-            neuron.y += neuron.vy;
-            neuron.pulse += 0.1;
-
-            // Bounce off edges
-            if (neuron.x < 0 || neuron.x > window.innerWidth) neuron.vx *= -1;
-            if (neuron.y < 0 || neuron.y > window.innerHeight) neuron.vy *= -1;
-
-            // Draw neuron
-            const alpha = (Math.sin(neuron.pulse) + 1) / 2 * 0.8 + 0.2;
-            neuralCtx.globalAlpha = alpha;
-            neuralCtx.fillStyle = '#a94df0';
-            neuralCtx.beginPath();
-            neuralCtx.arc(neuron.x, neuron.y, neuron.size, 0, Math.PI * 2);
-            neuralCtx.fill();
-        });
-
-        neuralCtx.globalAlpha = 1;
-        requestAnimationFrame(animateNeural);
-    }
-
-    animateNeural();
-
-    // Handle resize
-    window.addEventListener('resize', () => {
+    try {
         neuralCanvas.width = window.innerWidth;
         neuralCanvas.height = window.innerHeight;
-    });
+        neuralCtx = neuralCanvas.getContext('2d');
+
+        const neurons = [];
+        const connections = [];    // Generate fewer nodes for better performance
+        for (let i = 0; i < 50; i++) {
+            neurons.push({
+                x: Math.random() * window.innerWidth,
+                y: Math.random() * window.innerHeight,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2,
+                size: Math.random() * 3 + 1,
+                pulse: Math.random() * Math.PI * 2
+            });
+        }
+
+        // Create connections
+        for (let i = 0; i < neurons.length; i++) {
+            for (let j = i + 1; j < neurons.length; j++) {
+                if (Math.random() < 0.1) {
+                    connections.push({ from: i, to: j, strength: Math.random() });
+                }
+            }
+        }
+
+        function animateNeural() {
+            neuralCtx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+            // Update and draw connections
+            neuralCtx.strokeStyle = 'rgba(169, 77, 240, 0.1)';
+            neuralCtx.lineWidth = 1;
+
+            connections.forEach(conn => {
+                const from = neurons[conn.from];
+                const to = neurons[conn.to];
+                const distance = Math.sqrt((to.x - from.x) ** 2 + (to.y - from.y) ** 2);
+
+                if (distance < 200) {
+                    neuralCtx.beginPath();
+                    neuralCtx.moveTo(from.x, from.y);
+                    neuralCtx.lineTo(to.x, to.y);
+                    neuralCtx.globalAlpha = (200 - distance) / 200 * conn.strength;
+                    neuralCtx.stroke();
+                }
+            });
+
+            // Update and draw neurons
+            neurons.forEach(neuron => {
+                neuron.x += neuron.vx;
+                neuron.y += neuron.vy;
+                neuron.pulse += 0.1;
+
+                // Bounce off edges
+                if (neuron.x < 0 || neuron.x > window.innerWidth) neuron.vx *= -1;
+                if (neuron.y < 0 || neuron.y > window.innerHeight) neuron.vy *= -1;
+
+                // Draw neuron
+                const alpha = (Math.sin(neuron.pulse) + 1) / 2 * 0.8 + 0.2;
+                neuralCtx.globalAlpha = alpha;
+                neuralCtx.fillStyle = '#a94df0';
+                neuralCtx.beginPath();
+                neuralCtx.arc(neuron.x, neuron.y, neuron.size, 0, Math.PI * 2);
+                neuralCtx.fill();
+            });
+
+            neuralCtx.globalAlpha = 1;
+            requestAnimationFrame(animateNeural);
+        } animateNeural();
+
+        // Handle resize
+        window.addEventListener('resize', () => {
+            neuralCanvas.width = window.innerWidth;
+            neuralCanvas.height = window.innerHeight;
+        });
+
+    } catch (error) {
+        console.error('Error initializing neural canvas:', error);
+    }
 }
 
 // Network toggle functionality
@@ -245,7 +261,9 @@ function initNetworkToggle() {
         networkToggle.addEventListener('click', () => {
             networkContainer.classList.add('active');
             setTimeout(() => networkContainer.classList.add('show'), 10);
-            if (!scene) initNetworkGlobe();
+            if (!scene) {
+                initNetworkGlobe();
+            }
         });
     }
 
@@ -319,8 +337,14 @@ function initializeBackgroundEffects() {
 
 // Main initialization
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('VantaAI website loaded successfully');
+
     // Start boot sequence
     showBootSequence();
+
+    // Initialize network toggle immediately (don't wait for boot sequence)
+    initNetworkToggle();
+
     // FAQ functionality
     const faqItems = document.querySelectorAll('.faq-item');
     faqItems.forEach(item => {
@@ -362,25 +386,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 });
             }
         });
-    });
-
-    // Navbar hide/show on scroll
+    });    // Navbar hide/show on scroll (throttled for performance)
     let lastScrollTop = 0;
     const navbar = document.querySelector('.navbar');
+    let scrollTimeout;
 
     window.addEventListener('scroll', () => {
-        const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        if (scrollTimeout) return;
 
-        if (scrollTop > lastScrollTop && scrollTop > 100) {
-            // Scrolling down
-            navbar.classList.add('hidden');
-        } else {
-            // Scrolling up
-            navbar.classList.remove('hidden');
-        }
+        scrollTimeout = setTimeout(() => {
+            const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-        lastScrollTop = scrollTop;
-    });
+            if (scrollTop > lastScrollTop && scrollTop > 100) {
+                // Scrolling down
+                navbar.classList.add('hidden');
+            } else {
+                // Scrolling up
+                navbar.classList.remove('hidden');
+            }
+
+            lastScrollTop = scrollTop;
+            scrollTimeout = null;
+        }, 10); // Throttle to every 10ms
+    }, { passive: true });
 
     // Typing animation
     const typingElement = document.getElementById('typing-text');
