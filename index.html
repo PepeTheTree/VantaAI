@@ -159,7 +159,8 @@
                         <div class="timeline-content">
                             <h3>Memory System</h3>
                             <p>"Vanta tracks emotionally weighted entries. Over time, she learns what <em>hurts</em> or
-                                <em>soothes</em>."</p>
+                                <em>soothes</em>."
+                            </p>
                         </div>
                     </div>
 
@@ -322,15 +323,24 @@
             <button class="modal-close" onclick="hideEmailModal()">×</button>
             <h2>Join the Waitlist</h2>
             <p>Be the first to experience truly local AI with emotional intelligence.</p>
-            <form id="email-form" class="email-form">
-                <input type="email" id="email" class="email-input" placeholder="your@email.com" required>
-                <button type="submit" class="submit-btn">Join Waitlist</button>
-            </form>
-            <div class="success-message">
-                🎉 You're on the list! We'll notify you when VantaAI is ready.
+            <!-- Google Forms Integration -->
+            <div id="email-form" class="email-form">
+                <iframe id="google-form-iframe"
+                    src="https://docs.google.com/forms/d/e/1FAIpQLSfj4QzGRlW8TQGr5nnWH_QDXOGxrYIVjKc7sY8n0Z6aGcmxXQ/viewform?embedded=true"
+                    width="100%" height="400" frameborder="0" marginheight="0" marginwidth="0"
+                    style="border-radius: 10px;">
+                    Loading…
+                </iframe>
+
+                <!-- Alternative direct link -->
+                <div class="form-backup">
+                    <p>Form not loading? <a href="https://forms.gle/xrjiEuGWLtEGaxaN6" target="_blank"
+                            class="form-link">Open in new tab</a></p>
+                </div>
             </div>
-            <div class="error-message">
-                Something went wrong. Please try again.
+
+            <div class="success-message" style="display: none;">
+                🎉 You're on the list! We'll notify you when VantaAI is ready.
             </div>
         </div>
     </div>
