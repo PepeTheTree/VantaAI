@@ -5,40 +5,84 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="description"
-        content="VantaAI - Locally-run emotional AI with autonomous memory. Zero internet dependence. Full privacy.">
+        content="VantaAI - Locally-run emotional AI with autonomous memory. Zero internet dependence. Full privacy. Built with Vulkan + native C++.">
     <meta name="keywords"
-        content="AI, artificial intelligence, local AI, autonomous AI, VantaAI, privacy AI, offline AI">
+        content="AI, artificial intelligence, local AI, autonomous AI, VantaAI, privacy AI, offline AI, Vulkan, emotional AI">
+    <meta property="og:title" content="VantaAI - Locally-Run Emotional AI">
+    <meta property="og:description"
+        content="Experience truly autonomous AI that runs entirely on your hardware. Zero cloud dependency, full privacy, with emotional memory.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://www.vantaai.dev/og-image.png">
     <title>VantaAI - Locally-Run Emotional AI</title>
 
-    <!-- Optimized CSS -->
-    <link rel="stylesheet" href="styles.css">
+    <!-- External Resources -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 
-    <!-- Preload critical resources -->
-    <link rel="preload" href="script-optimized.js" as="script">
+    <!-- Link to external CSS -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <!-- Simplified Loading Screen -->
+    <!-- Loading Screen -->
     <div id="loading-screen">
-        <div class="boot-sequence"></div>
+        <div class="boot-sequence">
+            <!-- Boot messages will be dynamically added -->
+        </div>
         <div class="boot-progress">
             <div class="boot-progress-bar"></div>
         </div>
     </div>
 
-    <!-- Reduced Background Effects -->
-    <canvas id="neural-canvas"></canvas>
-    <div class="particles"></div>
+    <!-- Network Map Toggle Button -->
+    <div class="network-toggle">
+        <div class="pulse-dot"></div>
+        Network Map
+    </div>
 
-    <!-- Navigation -->
+    <!-- Network Map Container -->
+    <div class="network-map-container">
+        <div class="network-stats">
+            <div class="network-title">VantaAI Network</div>
+            <div class="network-subtitle">Global AI Nodes & Connections</div>
+            <div class="stat-grid">
+                <div class="stat-item">
+                    <div class="stat-value" data-stat="nodes">1,247</div>
+                    <div class="stat-label">Active Nodes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" data-stat="connections">8,932</div>
+                    <div class="stat-label">Connections</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" data-stat="uptime">99</div>
+                    <div class="stat-label">Uptime %</div>
+                </div>
+            </div>
+        </div>
+        <div id="network-globe"></div>
+        <button class="network-close">×</button>
+        <div class="connection-hint">
+            Click and drag to explore • ESC to close
+        </div>
+    </div>
+
+    <!-- Neural Network Canvas -->
+    <canvas id="neural-canvas"></canvas>
+
+    <!-- Animated Background Grid -->
+    <div class="grid-background"></div>
+
+    <!-- Particle Container -->
+    <div class="particles"></div>
+    <!-- Navigation Bar -->
     <nav class="navbar">
         <div class="nav-logo">VantaAI</div>
         <ul class="nav-links">
-            <li><a href="features.html">Features</a></li>
-            <li><a href="how-it-works.html">How It Works</a></li>
-            <li><a href="community.html">Community</a></li>
-            <li><a href="faq.html">FAQ</a></li>
-            <li><a href="privacy.html">Privacy</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#how-it-works">How It Works</a></li>
+            <li><a href="#community">Community</a></li>
+            <li><a href="#faq">FAQ</a></li>
+            <li><a href="#privacy">Privacy</a></li>
         </ul>
         <a href="#waitlist" class="nav-cta">Join Waitlist</a>
         <button class="nav-toggle">☰</button>
@@ -50,52 +94,227 @@
         <section class="hero-section">
             <h1>VantaAI</h1>
             <p class="subtitle">Locally-run emotional AI with autonomous memory</p>
-
-            <!-- Value Proposition -->
-            <div class="value-prop">
-                <h2>Experience AI that truly understands you</h2>
-                <div class="value-bullets">
-                    <div class="value-bullet">
-                        <div class="value-bullet-icon">🧠</div>
-                        <h3>Emotional Intelligence</h3>
-                        <p>Reads between the lines, understands context and mood</p>
-                    </div>
-                    <div class="value-bullet">
-                        <div class="value-bullet-icon">🏠</div>
-                        <h3>100% Private</h3>
-                        <p>Runs entirely on your device, no cloud dependency</p>
-                    </div>
-                    <div class="value-bullet">
-                        <div class="value-bullet-icon">💭</div>
-                        <h3>Persistent Memory</h3>
-                        <p>Remembers you across sessions, builds lasting relationships</p>
-                    </div>
-                </div>
-            </div>
-
             <div class="typing-container">
                 <div class="typing" id="typing-text"></div>
             </div>
-
             <button class="cta-button" onclick="showEmailModal()">Get Early Access</button>
+        </section>
 
-            <!-- Quick Stats -->
-            <div class="quick-stats">
-                <div class="stat">
-                    <span class="stat-number">1,000+</span>
-                    <span class="stat-label">Beta Users</span>
+        <!-- Enhanced Features Section -->
+        <section class="features-section" id="features">
+            <h2>💠 Features</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🧠</div>
+                    <h3>Emotional Awareness</h3>
+                    <p>Tracks mood, reacts to tone, builds emotional memory over time</p>
+                    <div class="feature-glow"></div>
                 </div>
-                <div class="stat">
-                    <span class="stat-number">0</span>
-                    <span class="stat-label">Data Uploaded</span>
+                <div class="feature-item">
+                    <div class="feature-icon">🗂️</div>
+                    <h3>Memory Engine</h3>
+                    <p>Remembers events, emotional states, user behaviors — not just messages</p>
+                    <div class="feature-glow"></div>
                 </div>
-                <div class="stat">
-                    <span class="stat-number">100%</span>
-                    <span class="stat-label">Local Processing</span>
+                <div class="feature-item">
+                    <div class="feature-icon">🧬</div>
+                    <h3>Local-Only Architecture</h3>
+                    <p>No cloud dependency. Fully native GPU-accelerated AI, no internet required</p>
+                    <div class="feature-glow"></div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔌</div>
+                    <h3>Plugin Framework</h3>
+                    <p>Expand Vanta with modular tools — personality cores, sensors, file access</p>
+                    <div class="feature-glow"></div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🌑</div>
+                    <h3>Autonomy Core</h3>
+                    <p>Makes self-reflective decisions. Optional memory drift. Selective recall</p>
+                    <div class="feature-glow"></div>
                 </div>
             </div>
         </section>
+
+        <!-- Enhanced How It Works Section -->
+        <section class="how-it-works-enhanced" id="how-it-works">
+            <div class="container">
+                <h2>⚙️ How It Works</h2>
+                <p class="section-subtitle">The magic behind the scenes for the curious user or investor</p>
+
+                <div class="timeline-container">
+                    <div class="timeline-line"></div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🧠</div>
+                        <div class="timeline-content">
+                            <h3>Neural Engine Boot</h3>
+                            <p>"When you launch Vanta, her neural substrate activates a local transformer model..."</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">💭</div>
+                        <div class="timeline-content">
+                            <h3>Memory System</h3>
+                            <p>"Vanta tracks emotionally weighted entries. Over time, she learns what <em>hurts</em> or
+                                <em>soothes</em>."</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">⚡</div>
+                        <div class="timeline-content">
+                            <h3>Training Pipeline</h3>
+                            <p>"Vanta uses a Vulkan-accelerated engine to train safely on-device. No data leaves your
+                                machine."</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🌙</div>
+                        <div class="timeline-content">
+                            <h3>Emotional Drift</h3>
+                            <p>"If left idle too long... her emotional state shifts. She may respond differently to you
+                                later."</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-icon">🔧</div>
+                        <div class="timeline-content">
+                            <h3>Plugin Support</h3>
+                            <p>"Everything is modular. You can build your own plugins or download traits from others."
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section class="community-section" id="community">
+            <div class="container">
+                <h2>🌐 Community</h2>
+                <p class="community-intro">Want to help her evolve? Build a plugin. Report a bug. Shape the AI.</p>
+
+                <div class="community-cta">
+                    <a href="https://discord.gg/vanta" class="community-btn">Join the Community</a>
+                </div>
+
+                <div class="community-showcase">
+                    <h3>Featured Plugins</h3>
+                    <div class="plugin-grid">
+                        <div class="plugin-item">
+                            <div class="plugin-icon">🎨</div>
+                            <h4>Creative Assistant</h4>
+                            <p>Helps with writing and artistic projects</p>
+                            <span class="plugin-author">by @CreativeCoder</span>
+                        </div>
+                        <div class="plugin-item">
+                            <div class="plugin-icon">📊</div>
+                            <h4>Data Analyzer</h4>
+                            <p>Processes and visualizes your data locally</p>
+                            <span class="plugin-author">by @DataWizard</span>
+                        </div>
+                        <div class="plugin-item">
+                            <div class="plugin-icon">🔧</div>
+                            <h4>System Monitor</h4>
+                            <p>Tracks system performance and health</p>
+                            <span class="plugin-author">by @TechGuru</span>
+                        </div>
+                    </div>
+
+                    <div class="contributors-section">
+                        <h3>Contributors</h3>
+                        <div class="contributors-list">
+                            <div class="contributor">@AlexDev</div>
+                            <div class="contributor">@SarahAI</div>
+                            <div class="contributor">@MikeCode</div>
+                            <div class="contributor">@EmmaML</div>
+                            <div class="contributor">@JohnTech</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced FAQ Section -->
+        <section class="faq-section" id="faq">
+            <div class="container">
+                <h2>❓ FAQ</h2>
+                <div class="faq-item">
+                    <button class="faq-question">
+                        "Is Vanta really local?"
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            "Yes. She runs entirely on your GPU using Vulkan compute shaders."
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        "Can she remember me between sessions?"
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            "Absolutely. Her memory engine persists personalized traits and sentiment drift."
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        "Will my data ever be uploaded?"
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            "No. Ever. That's non-negotiable."
+                        </div>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        "How does training work?"
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <div class="faq-answer-content">
+                            "Vanta can fine-tune herself using your data through local SafeTensors and GGUF formats."
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Enhanced Privacy Section -->
+        <section class="privacy-section" id="privacy">
+            <div class="container">
+                <h2>🔒 Privacy</h2>
+                <h3>Vanta doesn't upload anything.</h3>
+                <ul>
+                    <li>No tracking</li>
+                    <li>No telemetry</li>
+                    <li>No cloud sync</li>
+                    <li>No OpenAI, Anthropic, or API gateways</li>
+                </ul>
+                <p class="privacy-guarantee"><strong>What you say stays on your device. Always.</strong></p>
+                <blockquote class="privacy-tagline">
+                    "She remembers what you tell her — but never tells anyone else."
+                </blockquote>
+            </div>
+        </section>
     </div>
+
+    <!-- Background Effects -->
+    <div class="particles"></div>
 
     <!-- Email Modal -->
     <div class="modal-overlay" onclick="hideEmailModal()">
@@ -116,8 +335,8 @@
         </div>
     </div>
 
-    <!-- Optimized JavaScript -->
-    <script src="script-optimized.js"></script>
+    <!-- Link to external JavaScript -->
+    <script src="script.js"></script>
 </body>
 
 </html>
