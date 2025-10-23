@@ -243,14 +243,14 @@
                     <input type="text"
                            class="auth-input"
                            id="serverHost"
-                           placeholder="Server Host (IPv6 or domain)"
-                           value="2603:8000:300:42a9:b466:bcf3:9c4c:ab99"
+                           placeholder="Server Host (domain or IP)"
+                           value="api.vantaai.dev"
                            required>
-                    <input type="number" 
-                           class="auth-input" 
-                           id="serverPort" 
-                           placeholder="Server Port (default: 8004)" 
-                           value="8004" 
+                    <input type="number"
+                           class="auth-input"
+                           id="serverPort"
+                           placeholder="Server Port (443 for HTTPS)"
+                           value="443"
                            required>
                 </div>
 
@@ -326,13 +326,18 @@
                 return;
             }
             
-            // Test connection to server - handle IPv6 addresses
-            let formattedHost = serverHost;
-            if (serverHost.includes(':') && !serverHost.startsWith('[')) {
+            // Test connection to server - use HTTPS for domains, HTTP for IPs
+            let serverUrl;
+            if (serverHost.includes('vantaai.dev') || serverHost.includes('.')) {
+                // Domain name - use HTTPS
+                serverUrl = `https://${serverHost}`;
+            } else if (serverHost.includes(':') && !serverHost.startsWith('[')) {
                 // IPv6 address needs brackets
-                formattedHost = `[${serverHost}]`;
+                serverUrl = `http://[${serverHost}]:${serverPort}`;
+            } else {
+                // IPv4 or other
+                serverUrl = `http://${serverHost}:${serverPort}`;
             }
-            const serverUrl = `http://${formattedHost}:${serverPort}`;
             
             try {
                 // Test if server is reachable
