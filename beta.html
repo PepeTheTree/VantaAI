@@ -326,8 +326,13 @@
                 return;
             }
             
-            // Test connection to server
-            const serverUrl = `http://${serverHost}:${serverPort}`;
+            // Test connection to server - handle IPv6 addresses
+            let formattedHost = serverHost;
+            if (serverHost.includes(':') && !serverHost.startsWith('[')) {
+                // IPv6 address needs brackets
+                formattedHost = `[${serverHost}]`;
+            }
+            const serverUrl = `http://${formattedHost}:${serverPort}`;
             
             try {
                 // Test if server is reachable
@@ -396,7 +401,8 @@
                     const response = await fetch(`${serverUrl}/api/config`, {
                         method: 'GET',
                         mode: 'cors',
-                        credentials: 'omit'
+                        credentials: 'omit',
+                        timeout: 5000
                     });
                     
                     if (response.ok) {
