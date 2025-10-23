@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VantaAI Beta - Secure Testing Environment</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Beta-specific styles */
+        .beta-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-screen {
+            background: rgba(13, 13, 13, 0.95);
+            border: 2px solid #a94df0;
+            border-radius: 15px;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(169, 77, 240, 0.5);
+            backdrop-filter: blur(20px);
+        }
+
+        .beta-logo {
+            font-size: 3rem;
+            background: linear-gradient(45deg, #a94df0, #d64df0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            font-weight: bold;
+        }
+
+        .beta-subtitle {
+            color: #888;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .auth-input {
+            background: rgba(169, 77, 240, 0.1);
+            border: 1px solid rgba(169, 77, 240, 0.3);
+            color: #fff;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .auth-input:focus {
+            outline: none;
+            border-color: #a94df0;
+            box-shadow: 0 0 15px rgba(169, 77, 240, 0.3);
+        }
+
+        .auth-button {
+            background: #a94df0;
+            color: #000;
+            border: none;
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .auth-button:hover {
+            background: #d64df0;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(169, 77, 240, 0.5);
+        }
+
+        .auth-button:disabled {
+            background: #666;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .error-message {
+            color: #ff4444;
+            background: rgba(255, 68, 68, 0.1);
+            border: 1px solid #ff4444;
+            border-radius: 5px;
+            padding: 1rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .vanta-interface {
+            display: none;
+            width: 100%;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+
+        .vanta-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+        }
+
+        .connection-status {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(13, 13, 13, 0.9);
+            border: 1px solid #a94df0;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            color: #fff;
+            font-size: 0.9rem;
+            z-index: 1001;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #00ff00;
+            animation: pulse 2s infinite;
+        }
+
+        .status-dot.disconnected {
+            background: #ff4444;
+            animation: none;
+        }
+
+        .logout-button {
+            position: fixed;
+            top: 1rem;
+            left: 1rem;
+            background: rgba(13, 13, 13, 0.9);
+            border: 1px solid #a94df0;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            color: #a94df0;
+            cursor: pointer;
+            font-size: 0.9rem;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background: rgba(169, 77, 240, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .warning-banner {
+            background: rgba(255, 165, 0, 0.1);
+            border: 1px solid #ffa500;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 2rem;
+            color: #ffa500;
+            text-align: center;
+        }
+
+        .server-config {
+            background: rgba(13, 13, 13, 0.8);
+            border: 1px solid rgba(169, 77, 240, 0.3);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .config-label {
+            color: #a94df0;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.7; transform: scale(1.2); }
+        }
+    </style>
+</head>
+<body>
+    <!-- Animated Background Grid -->
+    <div class="grid-background"></div>
+
+    <!-- Particle Container -->
+    <div class="particles"></div>
+
+    <div class="beta-container">
+        <!-- Authentication Screen -->
+        <div class="auth-screen" id="authScreen">
+            <div class="beta-logo">VantaAI Beta</div>
+            <div class="beta-subtitle">Secure Testing Environment</div>
+            
+            <div class="warning-banner">
+                ⚠️ This is a private beta testing environment. Authorized access only.
+            </div>
+
+            <form class="auth-form" id="authForm">
+                <div class="server-config">
+                    <div class="config-label">Server Configuration</div>
+                    <input type="text"
+                           class="auth-input"
+                           id="serverHost"
+                           placeholder="Server Host (IPv6 or domain)"
+                           value="2603:8000:300:42a9:b466:bcf3:9c4c:ab99"
+                           required>
+                    <input type="number" 
+                           class="auth-input" 
+                           id="serverPort" 
+                           placeholder="Server Port (default: 8004)" 
+                           value="8004" 
+                           required>
+                </div>
+
+                <input type="password" 
+                       class="auth-input" 
+                       id="betaPassword" 
+                       placeholder="Beta Access Code" 
+                       required>
+                
+                <button type="submit" class="auth-button" id="connectButton">
+                    Connect to Vanta
+                </button>
+                
+                <div class="error-message" id="errorMessage"></div>
+            </form>
+
+            <div style="margin-top: 2rem; color: #666; font-size: 0.9rem;">
+                <p>🔒 All connections are encrypted and logged</p>
+                <p>📊 Beta testing data helps improve VantaAI</p>
+                <p>🏠 Connects directly to Michael's development server</p>
+            </div>
+        </div>
+
+        <!-- Vanta Interface (Hidden Initially) -->
+        <div class="vanta-interface" id="vantaInterface">
+            <div class="connection-status" id="connectionStatus">
+                <div class="status-dot" id="statusDot"></div>
+                <span id="statusText">Connected to Development Server</span>
+            </div>
+            
+            <button class="logout-button" onclick="logout()">
+                ← Exit Beta
+            </button>
+
+            <iframe class="vanta-frame" id="vantaFrame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Beta testing configuration
+        const VALID_PASSWORDS = {
+            'vanta-beta-2024': 'Standard Beta Access',
+            'vanta-dev-test': 'Developer Access',
+            'vanta-alpha-core': 'Alpha Tester Access'
+        };
+
+        // Authentication handling
+        document.getElementById('authForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const serverHost = document.getElementById('serverHost').value.trim();
+            const serverPort = document.getElementById('serverPort').value.trim();
+            const password = document.getElementById('betaPassword').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const connectButton = document.getElementById('connectButton');
+            
+            // Clear previous errors
+            errorDiv.style.display = 'none';
+            connectButton.disabled = true;
+            connectButton.textContent = 'Connecting...';
+            
+            // Validate password
+            if (!VALID_PASSWORDS[password]) {
+                showError('Invalid beta access code');
+                resetButton();
+                return;
+            }
+            
+            // Validate server configuration
+            if (!serverHost || !serverPort) {
+                showError('Please configure server connection details');
+                resetButton();
+                return;
+            }
+            
+            // Test connection to server
+            const serverUrl = `http://${serverHost}:${serverPort}`;
+            
+            try {
+                // Test if server is reachable
+                const response = await fetch(`${serverUrl}/api/config`, {
+                    method: 'GET',
+                    mode: 'cors',
+                    credentials: 'omit'
+                });
+                
+                if (response.ok) {
+                    // Store session
+                    sessionStorage.setItem('betaAuth', 'true');
+                    sessionStorage.setItem('betaAccess', VALID_PASSWORDS[password]);
+                    sessionStorage.setItem('serverUrl', serverUrl);
+                    
+                    // Log access
+                    logBetaAccess(password, serverHost, serverPort);
+                    
+                    // Show Vanta interface
+                    showVantaInterface(serverUrl);
+                } else {
+                    throw new Error('Server responded with error');
+                }
+                
+            } catch (error) {
+                console.error('Connection error:', error);
+                showError(`Cannot connect to server at ${serverUrl}. Please check:\n• Server is running\n• Host/port are correct\n• Firewall allows connections\n• CORS is configured`);
+                resetButton();
+            }
+        });
+        
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+        }
+        
+        function resetButton() {
+            const connectButton = document.getElementById('connectButton');
+            connectButton.disabled = false;
+            connectButton.textContent = 'Connect to Vanta';
+        }
+        
+        function showVantaInterface(serverUrl) {
+            const authScreen = document.getElementById('authScreen');
+            const vantaInterface = document.getElementById('vantaInterface');
+            const vantaFrame = document.getElementById('vantaFrame');
+            
+            // Hide auth screen
+            authScreen.style.display = 'none';
+            
+            // Show Vanta interface
+            vantaInterface.style.display = 'block';
+            vantaFrame.src = serverUrl;
+            
+            // Start connection monitoring
+            startConnectionMonitoring(serverUrl);
+        }
+        
+        function startConnectionMonitoring(serverUrl) {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            
+            setInterval(async () => {
+                try {
+                    const response = await fetch(`${serverUrl}/api/config`, {
+                        method: 'GET',
+                        mode: 'cors',
+                        credentials: 'omit'
+                    });
+                    
+                    if (response.ok) {
+                        statusDot.classList.remove('disconnected');
+                        statusText.textContent = 'Connected to Development Server';
+                    } else {
+                        throw new Error('Server error');
+                    }
+                } catch (error) {
+                    statusDot.classList.add('disconnected');
+                    statusText.textContent = 'Connection Lost - Retrying...';
+                }
+            }, 10000); // Check every 10 seconds
+        }
+        
+        function logout() {
+            // Clear session
+            sessionStorage.clear();
+            
+            // Reload page to show auth screen
+            location.reload();
+        }
+        
+        function logBetaAccess(accessCode, host, port) {
+            // Log beta access for analytics
+            const logData = {
+                timestamp: new Date().toISOString(),
+                accessLevel: VALID_PASSWORDS[accessCode],
+                serverHost: host,
+                serverPort: port,
+                userAgent: navigator.userAgent,
+                ip: 'logged-server-side' // Will be logged by server
+            };
+            
+            console.log('Beta Access Granted:', logData);
+            
+            // You could send this to a logging endpoint if needed
+            // fetch('/api/log-beta-access', { method: 'POST', body: JSON.stringify(logData) });
+        }
+        
+        // Check if already authenticated
+        window.addEventListener('load', () => {
+            const betaAuth = sessionStorage.getItem('betaAuth');
+            const serverUrl = sessionStorage.getItem('serverUrl');
+            
+            if (betaAuth === 'true' && serverUrl) {
+                // Auto-connect if session exists
+                showVantaInterface(serverUrl);
+            }
+        });
+        
+        // Initialize particle effects
+        function initParticleSystem() {
+            const particleContainer = document.querySelector('.particles');
+            if (!particleContainer) return;
+
+            function createParticle() {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 10 + 's';
+                particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
+                particleContainer.appendChild(particle);
+
+                setTimeout(() => {
+                    if (particle.parentNode) {
+                        particle.remove();
+                    }
+                }, 10000);
+            }
+
+            setInterval(createParticle, 500);
+        }
+        
+        // Initialize effects
+        document.addEventListener('DOMContentLoaded', () => {
+            initParticleSystem();
+        });
+    </script>
+</body>
+</html>
