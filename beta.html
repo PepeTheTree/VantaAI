@@ -196,6 +196,28 @@
             0%, 100% { opacity: 1; transform: scale(1); }
             50% { opacity: 0.7; transform: scale(1.2); }
         }
+
+        /* Fix particle and background z-index issues */
+        .grid-background, .particles {
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .particle {
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        /* Ensure main content is interactive */
+        .beta-container {
+            position: relative;
+            z-index: 10;
+        }
+
+        .auth-screen {
+            position: relative;
+            z-index: 20;
+        }
     </style>
 </head>
 <body>
@@ -426,32 +448,15 @@
             }
         });
         
-        // Initialize particle effects
+        // Initialize particle effects - DISABLED to fix flickering
         function initParticleSystem() {
-            const particleContainer = document.querySelector('.particles');
-            if (!particleContainer) return;
-
-            function createParticle() {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                particle.style.left = Math.random() * 100 + '%';
-                particle.style.animationDelay = Math.random() * 10 + 's';
-                particle.style.animationDuration = (Math.random() * 5 + 5) + 's';
-                particleContainer.appendChild(particle);
-
-                setTimeout(() => {
-                    if (particle.parentNode) {
-                        particle.remove();
-                    }
-                }, 10000);
-            }
-
-            setInterval(createParticle, 500);
+            // Temporarily disabled to prevent UI interference
+            console.log('Particle system disabled for beta testing');
         }
         
         // Initialize effects
         document.addEventListener('DOMContentLoaded', () => {
-            initParticleSystem();
+            // initParticleSystem(); // Disabled
         });
     </script>
 </body>
