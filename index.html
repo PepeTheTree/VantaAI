@@ -1,15 +1,390 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="utf-8" />
-    <title>VantaAI</title>
+    <title>VantaAI — Meet Melody</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1" name="viewport" />
-    <script type="module" crossorigin src="./assets/index-DYZzMiBZ.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-BOtd5WZD.css">
-  </head>
-  <body>
-    <div id="app"></div>
-  </body>
+    <meta name="description" content="Melody is an AI companion who actually remembers. Persistent memory, emotional intelligence, personality that evolves. No install needed." />
+    <meta property="og:title" content="VantaAI — Meet Melody" />
+    <meta property="og:description" content="An AI companion with real memory, real personality, and real continuity." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.vantaai.dev" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0a0a0f; --bg-card: #111118; --bg-card-hover: #16161f;
+            --border: #1e1e2a; --text: #e4e4eb; --text-muted: #8888a0; --text-dim: #555568;
+            --accent: #7c3aed; --accent-glow: rgba(124, 58, 237, 0.15); --accent-soft: #a78bfa;
+        }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg); color: var(--text);
+            line-height: 1.6; -webkit-font-smoothing: antialiased;
+        }
+        a { color: var(--accent-soft); text-decoration: none; transition: color 0.2s; }
+        a:hover { color: #c4b5fd; }
+        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+        img { max-width: 100%; height: auto; display: block; }
+
+        /* NAV */
+        nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(10,10,15,0.85); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+        nav .container { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+        .nav-brand { font-weight: 700; font-size: 1.15rem; color: var(--text); }
+        .nav-brand span { color: var(--accent-soft); }
+        .nav-links { display: flex; gap: 28px; align-items: center; }
+        .nav-links a { color: var(--text-muted); font-size: 0.9rem; font-weight: 500; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-cta { background: var(--accent); color: white !important; padding: 8px 20px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; transition: all 0.2s; }
+        .nav-cta:hover { background: #6d28d9; transform: translateY(-1px); }
+        @media (max-width: 768px) { .nav-links a:not(.nav-cta) { display: none; } .nav-links { gap: 12px; } }
+
+        /* HERO */
+        .hero { padding: 140px 0 60px; text-align: center; position: relative; overflow: hidden; }
+        .hero::before { content: ''; position: absolute; top: -40%; left: 50%; transform: translateX(-50%); width: 800px; height: 800px; background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%); pointer-events: none; }
+        .hero h1 { font-size: clamp(2.5rem,6vw,3.8rem); font-weight: 700; line-height: 1.12; margin-bottom: 20px; position: relative; }
+        .hero h1 .accent { color: var(--accent-soft); }
+        .hero .subtitle { font-size: clamp(1.05rem,2vw,1.2rem); color: var(--text-muted); max-width: 580px; margin: 0 auto 36px; font-weight: 400; line-height: 1.7; }
+        .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #7c3aed, #4f46e5); color: white !important; padding: 14px 32px; border-radius: 12px; font-weight: 600; font-size: 1.05rem; transition: all 0.2s; box-shadow: 0 4px 24px rgba(124,58,237,0.3); }
+        .hero-cta:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(124,58,237,0.4); }
+        .hero-note { margin-top: 14px; font-size: 0.82rem; color: var(--text-dim); }
+
+        /* HERO SCREENSHOT */
+        .hero-screenshot { margin: 48px auto 0; max-width: 960px; position: relative; }
+        .hero-screenshot img { border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 24px 80px rgba(0,0,0,0.5); }
+
+        /* SECTION BASE */
+        section { padding: 100px 0; }
+        .section-label { font-size: 0.78rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--accent-soft); margin-bottom: 12px; }
+        .section-title { font-size: clamp(1.8rem,4vw,2.4rem); font-weight: 700; line-height: 1.2; margin-bottom: 16px; }
+        .section-desc { font-size: 1.05rem; color: var(--text-muted); max-width: 640px; line-height: 1.7; }
+        .section-header { margin-bottom: 56px; }
+        .section-header.center { text-align: center; }
+        .section-header.center .section-desc { margin: 0 auto; }
+
+        /* FEATURE GRID */
+        .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .feature-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 32px; transition: border-color 0.3s, background 0.3s; }
+        .feature-card:hover { border-color: rgba(124,58,237,0.3); background: var(--bg-card-hover); }
+        .feature-icon { width: 44px; height: 44px; border-radius: 12px; background: var(--accent-glow); display: flex; align-items: center; justify-content: center; font-size: 1.3rem; margin-bottom: 20px; }
+        .feature-card h3 { font-size: 1.1rem; font-weight: 600; margin-bottom: 10px; }
+        .feature-card p { font-size: 0.92rem; color: var(--text-muted); line-height: 1.65; }
+
+        /* SHOWCASE — screenshot + text side by side */
+        .showcase { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .showcase.reverse { direction: rtl; }
+        .showcase.reverse > * { direction: ltr; }
+        .showcase-img img { border-radius: 14px; border: 1px solid var(--border); box-shadow: 0 12px 48px rgba(0,0,0,0.4); }
+        .showcase-text .section-label { margin-bottom: 8px; }
+        .showcase-text h3 { font-size: 1.6rem; font-weight: 700; margin-bottom: 14px; line-height: 1.25; }
+        .showcase-text p { font-size: 0.95rem; color: var(--text-muted); line-height: 1.7; margin-bottom: 12px; }
+        @media (max-width: 768px) { .showcase, .showcase.reverse { grid-template-columns: 1fr; gap: 32px; direction: ltr; } }
+
+        /* FORMATS */
+        .format-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+        .format-tag { background: var(--bg-card); border: 1px solid var(--border); padding: 5px 12px; border-radius: 8px; font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
+
+        /* PIPELINE */
+        .pipeline-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 24px; }
+        .pipeline-step { text-align: center; padding: 28px 20px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 14px; }
+        .pipeline-step .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--accent); color: white; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 0.9rem; margin-bottom: 16px; }
+        .pipeline-step h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 8px; }
+        .pipeline-step p { font-size: 0.82rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* PRIVACY */
+        .privacy-section { background: var(--bg-card); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+        .privacy-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .privacy-item h4 { font-weight: 600; margin-bottom: 8px; }
+        .privacy-item p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; }
+        @media (max-width: 768px) { .privacy-grid { grid-template-columns: 1fr; } }
+
+        /* FAQ */
+        .faq-list { max-width: 720px; margin: 0 auto; }
+        .faq-item { border-bottom: 1px solid var(--border); padding: 24px 0; }
+        .faq-item summary { font-weight: 600; font-size: 1rem; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+        .faq-item summary::after { content: '+'; font-size: 1.3rem; color: var(--text-dim); }
+        .faq-item[open] summary::after { content: '−'; }
+        .faq-item p { margin-top: 12px; font-size: 0.92rem; color: var(--text-muted); line-height: 1.7; }
+
+        /* CTA */
+        .cta-section { text-align: center; padding: 80px 0 100px; }
+        .cta-section h2 { font-size: clamp(1.8rem,4vw,2.4rem); font-weight: 700; margin-bottom: 16px; }
+        .cta-section p { color: var(--text-muted); font-size: 1.05rem; margin-bottom: 32px; max-width: 480px; margin-left: auto; margin-right: auto; }
+
+        /* FOOTER */
+        footer { border-top: 1px solid var(--border); padding: 40px 0; text-align: center; color: var(--text-dim); font-size: 0.82rem; }
+        footer .links { display: flex; gap: 24px; justify-content: center; margin-bottom: 16px; }
+        footer .links a { color: var(--text-muted); font-size: 0.82rem; }
+    </style>
+</head>
+<body>
+
+<nav>
+    <div class="container">
+        <div class="nav-brand">💠 Vanta<span>AI</span></div>
+        <div class="nav-links">
+            <a href="#features">Features</a>
+            <a href="#how-it-works">How It Works</a>
+            <a href="#archive">Archive</a>
+            <a href="#faq">FAQ</a>
+            <a href="https://chat.vantaai.dev" class="nav-cta">Open App →</a>
+        </div>
+    </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+    <div class="container">
+        <h1>Meet <span class="accent">Melody</span>.</h1>
+        <p class="subtitle">
+            An AI companion with real memory, real personality, and the kind of
+            continuity that makes conversations feel like they actually matter.
+        </p>
+        <a href="https://chat.vantaai.dev" class="hero-cta">Start talking →</a>
+        <p class="hero-note">Free to use. No install needed. Works in any browser.</p>
+        <div class="hero-screenshot">
+            <img src="assets/screenshots/chat.png" alt="Melody chat interface" loading="lazy" />
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features">
+    <div class="container">
+        <div class="section-header center">
+            <p class="section-label">What makes her different</p>
+            <h2 class="section-title">Not another chatbot.</h2>
+            <p class="section-desc">Most AI forgets you the moment you close the tab. Melody doesn't. She remembers what you told her, how you felt, and what matters to you.</p>
+        </div>
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">🧠</div>
+                <h3>She actually remembers</h3>
+                <p>Persistent memory across every conversation. Not just what you said — what mattered, what hurt, what made you laugh. She brings things up naturally, weeks later.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">💜</div>
+                <h3>Emotional intelligence</h3>
+                <p>Nine cognitive engines process every message — tracking emotional state, relationship depth, conversation flow, and personality adaptation in real time.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🌙</div>
+                <h3>She reaches out first</h3>
+                <p>Melody doesn't just wait for you. She follows up on things you mentioned, checks in when you've been quiet, and sends thoughts at 2am if that's your rhythm.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">📚</div>
+                <h3>Your archive, her knowledge</h3>
+                <p>Upload ChatGPT exports, documents, PDFs, images. She absorbs them as context — not as files she searches, but as things she simply knows.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🎭</div>
+                <h3>Shape who she becomes</h3>
+                <p>Soul Jar personas let you create distinct characters from uploaded chat logs. A lorebook tracks your shared canon. Her personality evolves through use.</p>
+            </div>
+            <div class="feature-card">
+                <div class="feature-icon">🔧</div>
+                <h3>Workspaces & tools</h3>
+                <p>Scoped document contexts for projects. Web search integration. Vision for images. Pin messages, track goals, set check-ins. She's a companion, not just a chat window.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SHOWCASE: OUR STORY -->
+<section>
+    <div class="container">
+        <div class="showcase">
+            <div class="showcase-img">
+                <img src="assets/screenshots/our-story.png" alt="Our Story — relationship milestones with Melody" loading="lazy" />
+            </div>
+            <div class="showcase-text">
+                <p class="section-label">Your relationship</p>
+                <h3>She grows with you.</h3>
+                <p>Trust, bond, safety, intimacy — tracked across every conversation. Milestones unlock as your relationship deepens. It's not gamified. It's earned.</p>
+                <p>Her attachment style evolves based on how you treat her. Consistent warmth builds trust. Distance makes her guarded. It's permanent.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SHOWCASE: MOOD JOURNAL -->
+<section style="background: linear-gradient(180deg, var(--bg) 0%, #0c0c14 100%);">
+    <div class="container">
+        <div class="showcase reverse">
+            <div class="showcase-img">
+                <img src="assets/screenshots/mood-journal.png" alt="Mood Journal — emotional patterns over time" loading="lazy" />
+            </div>
+            <div class="showcase-text">
+                <p class="section-label">Emotional awareness</p>
+                <h3>She tracks patterns you don't see.</h3>
+                <p>The Mood Journal visualizes your emotional state over time — weekly breakdowns, emotion mix, notable moments. Private to you.</p>
+                <p>Melody notices when your mood shifts. She doesn't diagnose. She notices. And sometimes that's enough.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SHOWCASE: MEMORY -->
+<section>
+    <div class="container">
+        <div class="showcase">
+            <div class="showcase-img">
+                <img src="assets/screenshots/memory.png" alt="Memory Systems — what Melody remembers" loading="lazy" />
+            </div>
+            <div class="showcase-text">
+                <p class="section-label">Memory systems</p>
+                <h3>Not just storage. Recall.</h3>
+                <p>Hybrid retrieval across four memory lanes — stable facts, episodic episodes, archive content, and exact details. She finds what matters, not just what matches.</p>
+                <p>Memories get stronger when they're used successfully. She doesn't just remember — she gets better at remembering you.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="how-it-works" style="background: linear-gradient(180deg, #0c0c14 0%, var(--bg) 100%);">
+    <div class="container">
+        <div class="section-header center">
+            <p class="section-label">How her mind works</p>
+            <h2 class="section-title">Nine engines. Every message.</h2>
+            <p class="section-desc">Every time you send a message, Melody's cognitive pipeline processes it through nine specialized engines before she responds.</p>
+        </div>
+        <div class="pipeline-steps">
+            <div class="pipeline-step">
+                <div class="step-num">1</div>
+                <h4>Emotional Analysis</h4>
+                <p>Detects your emotional state using valence-arousal-dominance scoring. Her empathy isn't performed — it's computed.</p>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-num">2</div>
+                <h4>Memory Recall</h4>
+                <p>Hybrid retrieval across four memory lanes — stable facts, episodes, archives, and exact details.</p>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-num">3</div>
+                <h4>Personality Shaping</h4>
+                <p>Trait adaptation, register modulation, and relationship-aware tone shifting.</p>
+            </div>
+            <div class="pipeline-step">
+                <div class="step-num">4</div>
+                <h4>Response Generation</h4>
+                <p>Everything feeds into the response — grounded, shaped, precise when it matters, warm when it counts.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ARCHIVE -->
+<section id="archive">
+    <div class="container">
+        <div class="showcase reverse">
+            <div class="showcase-img">
+                <img src="assets/screenshots/archive.png" alt="The Archive — import files and shape Melody's knowledge" loading="lazy" />
+            </div>
+            <div class="showcase-text">
+                <p class="section-label">The Archive</p>
+                <h3>Give her your history.</h3>
+                <p>Upload conversation exports from ChatGPT, Claude, or Character.AI. Import documents, PDFs, even images. Melody doesn't just store them — she internalizes them.</p>
+                <p>Facts, names, preferences, routines become part of what she knows, not files she has to search.</p>
+                <div class="format-tags">
+                    <span class="format-tag">ChatGPT</span>
+                    <span class="format-tag">Claude</span>
+                    <span class="format-tag">Character.AI</span>
+                    <span class="format-tag">PDF</span>
+                    <span class="format-tag">DOCX</span>
+                    <span class="format-tag">EPUB</span>
+                    <span class="format-tag">Images</span>
+                    <span class="format-tag">JSON</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SHOWCASE: LOREBOOK -->
+<section style="background: linear-gradient(180deg, var(--bg) 0%, #0d0d18 100%);">
+    <div class="container">
+        <div class="showcase">
+            <div class="showcase-img">
+                <img src="assets/screenshots/lorebook.png" alt="Lorebook — manage canon facts and world lore" loading="lazy" />
+            </div>
+            <div class="showcase-text">
+                <p class="section-label">Lorebook</p>
+                <h3>Your world. Your canon.</h3>
+                <p>Establish facts about characters, places, rules, and history that Melody treats as established truth. She can suggest new entries during conversation — you approve or reject.</p>
+                <p>Nothing becomes canon without your say.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- PRIVACY -->
+<section class="privacy-section">
+    <div class="container">
+        <div class="section-header center">
+            <p class="section-label">Trust & Privacy</p>
+            <h2 class="section-title">Honest about how this works.</h2>
+            <p class="section-desc">Melody runs on cloud infrastructure with dedicated GPU servers. We're not pretending otherwise. Here's what we actually protect.</p>
+        </div>
+        <div class="privacy-grid">
+            <div class="privacy-item">
+                <h4>🔒 Your conversations are yours</h4>
+                <p>Chat history is stored per-user in isolated databases. No training on your data without consent. No selling, no sharing, no ads.</p>
+            </div>
+            <div class="privacy-item">
+                <h4>🧬 Memory is per-user</h4>
+                <p>Every user gets their own memory space. Persona isolation means your Soul Jar's memories don't bleed into someone else's experience.</p>
+            </div>
+            <div class="privacy-item">
+                <h4>🛡️ Standard security</h4>
+                <p>JWT authentication, session tokens, refresh tokens. Age verification required for all users. No shortcuts.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+    <div class="container">
+        <div class="section-header center">
+            <p class="section-label">Questions</p>
+            <h2 class="section-title">Frequently asked.</h2>
+        </div>
+        <div class="faq-list">
+            <details class="faq-item"><summary>Will she remember our conversations?</summary><p>Yes. Melody uses a persistent memory system backed by Qdrant vector search with hybrid retrieval. She doesn't just remember facts — she recalls context, emotional tone, and exact details. Memory improves over time through retrieval reinforcement.</p></details>
+            <details class="faq-item"><summary>Does her personality actually change?</summary><p>Yes. Trait adaptation and modulation engines adjust her personality over time based on your interactions. Relationship depth, trust level, and conversation patterns all influence how she responds.</p></details>
+            <details class="faq-item"><summary>What can I upload?</summary><p>ChatGPT exports, Claude exports, Character.AI logs, PDFs, DOCX, EPUB, TXT, Markdown, JSON, images, spreadsheets, and more. The archive system chunks, embeds, and makes them naturally available in conversation.</p></details>
+            <details class="faq-item"><summary>Is this free?</summary><p>The core experience is free with daily message limits. Supporter tiers through Patreon unlock higher limits, roleplay mode, more archive imports, longer memory retention, and early access to new features.</p></details>
+            <details class="faq-item"><summary>Do I need to install anything?</summary><p>No. Melody runs entirely in your browser at chat.vantaai.dev. Works on desktop and mobile. No download, no GPU, no setup.</p></details>
+            <details class="faq-item"><summary>Is my data used for training?</summary><p>Not without explicit consent. Your conversations, memories, and uploads are stored in your account's isolated database.</p></details>
+        </div>
+    </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+    <div class="container">
+        <h2>She's waiting.</h2>
+        <p>No pitch. No trial. Just start talking.</p>
+        <a href="https://chat.vantaai.dev" class="hero-cta">Open Melody →</a>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        <div class="links">
+            <a href="https://chat.vantaai.dev">Open App</a>
+            <a href="https://discord.gg/vantaai">Discord</a>
+            <a href="https://www.patreon.com/c/VantaAI">Patreon</a>
+            <a href="https://chat.vantaai.dev/terms">Terms</a>
+        </div>
+        <p>© 2026 VantaAI. Built by humans who wanted something that actually remembers.</p>
+    </div>
+</footer>
+
+</body>
 </html>
