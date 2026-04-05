@@ -382,9 +382,42 @@
             <a href="https://www.patreon.com/c/VantaAI">Patreon</a>
             <a href="https://chat.vantaai.dev/terms">Terms</a>
         </div>
+        <div id="server-status" style="margin: 16px 0 12px; display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 0.78rem; color: var(--text-dim);">
+            <span id="status-dot" style="width: 8px; height: 8px; border-radius: 50%; background: #555; display: inline-block;"></span>
+            <span id="status-text">Checking server...</span>
+        </div>
         <p>© 2026 VantaAI. Built by humans who wanted something that actually remembers.</p>
     </div>
 </footer>
+
+<script>
+(function() {
+    const dot = document.getElementById('status-dot');
+    const txt = document.getElementById('status-text');
+    function check() {
+        fetch('https://chat.vantaai.dev/health', { mode: 'cors', cache: 'no-store' })
+            .then(r => r.ok ? r.json() : Promise.reject())
+            .then(d => {
+                if (d.maintenance_mode) {
+                    dot.style.background = '#f59e0b';
+                    txt.textContent = 'Melody is in maintenance mode';
+                    txt.style.color = '#f59e0b';
+                } else {
+                    dot.style.background = '#10b981';
+                    txt.textContent = 'Melody is online';
+                    txt.style.color = '#8888a0';
+                }
+            })
+            .catch(() => {
+                dot.style.background = '#ef4444';
+                txt.textContent = 'Melody is currently offline';
+                txt.style.color = '#ef4444';
+            });
+    }
+    check();
+    setInterval(check, 60000);
+})();
+</script>
 
 </body>
 </html>
